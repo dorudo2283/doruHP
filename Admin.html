@@ -21,7 +21,7 @@
     <h2>CODE VERIFIER</h2>
     <p style="color: #888; font-size: 14px; margin-bottom: 10px;">コピーされたコードを貼り付けてください</p>
     <input type="text" id="inputCode" placeholder="00000-XXXXXX">
-    <button class="check-btn" onclick="verifyCode()">真贋判定システム起動</button>
+    <button class="check-btn" onclick="verifyCode()">判定</button>
     
     <div id="result"></div>
     
@@ -62,7 +62,7 @@
 
     // セキュリティ用簡易パスワード（任意）
     (function auth() {
-      const p = prompt("ADMIN PASSWORD:");
+      const p = prompt("パスワードを入力してください");
       if (p !== "dorugy") location.href = "index.html";
     })();
   </script>
