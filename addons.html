@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>アドオン - DORUDO SERVER</title>
+  <style>
+    /* CSSは共通 */
+    body { margin: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; padding-top: 80px; color: #333; }
+    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+    .side-menu.open { left: 0; }
+    .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+    .overlay.show { display: block; }
+    .container { width: 92%; max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-sizing: border-box; }
+    h1 { font-size: 22px; border-left: 5px solid #ff4d4d; padding-left: 15px; margin-bottom: 20px; }
+    .addon-box { background: #f0f4f8; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+    .addon-name { font-weight: bold; color: #1976d2; }
+    .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+  <div id="sideMenu" class="side-menu">
+    <a href="index.html">トップ</a><a href="updates.html">アプデ情報</a><a href="Num.html">認証コード発行</a><a href="access.html">鯖の入り方・情報</a><a href="rules.html">ルール</a><a href="Q.html">よくある質問</a><a href="GofList.html">ワールド一覧</a><a href="members.html">メンバー紹介</a><a href="Admin.html">管理者パネル</a>
+  </div>
+  <div class="header-bar">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <a href="index.html" class="header-title">DORUDO SERVER</a>
+    <div style="width: 40px;"></div>
+  </div>
+  <div class="container">
+    <h1>導入中のアドオン</h1>
+    <div class="addon-box">
+      <div class="addon-name">独自通貨アドオン</div>
+      <p>サーバー内の取引に使用する通貨を管理します。</p>
+    </div>
+    <div class="addon-box">
+      <div class="addon-name">家具追加アドオン</div>
+      <p>建築の幅を広げる多種多様な家具を追加します。</p>
+    </div>
+  </div>
+  <a href="index.html" class="back-link">トップに戻る</a>
+  <script>function toggleMenu(){document.getElementById('sideMenu').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}</script>
+</body>
+</html>
