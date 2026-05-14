@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADMIN</title>
+  <style>
+    body { font-family: sans-serif; background: #111; color: #fff; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; }
+    .admin-card { width: 90%; max-width: 360px; background: #222; padding: 30px 20px; border-radius: 20px; text-align: center; }
+    input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #444; background: #000; color: #fff; font-size: 28px; text-align: center; box-sizing: border-box; margin: 15px 0; }
+    .back-link { color: #666; text-decoration: none; font-size: 14px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div id="adminContent" style="display:none;">
+    <div class="admin-card">
+      <h2>管理者認証</h2>
+      <input type="number" id="checkCode" placeholder="000000" oninput="if(value.length > 6) value = value.slice(0,6);">
+      <p>管理機能をここに実装</p>
+      <a href="index.html" class="back-link">トップに戻る</a>
+    </div>
+  </div>
+  <script>
+    (function login() {
+      const pass = prompt("PASS:");
+      if (pass === "dorugy") { document.getElementById('adminContent').style.display = 'block'; }
+      else { window.location.href = "index.html"; }
+    })();
+  </script>
+</body>
+</html>
