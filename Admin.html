@@ -3,28 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADMIN</title>
+  <title>ADMIN PANEL - 検証</title>
   <style>
-    body { font-family: sans-serif; background: #111; color: #fff; margin: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; }
-    .admin-card { width: 90%; max-width: 360px; background: #222; padding: 30px 20px; border-radius: 20px; text-align: center; }
-    input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #444; background: #000; color: #fff; font-size: 28px; text-align: center; box-sizing: border-box; margin: 15px 0; }
-    .back-link { color: #666; text-decoration: none; font-size: 14px; margin-top: 20px; }
+    body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+    .admin-card { width: 100%; max-width: 450px; background: #1a1a1a; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
+    h2 { color: #ff4d4d; margin-bottom: 25px; }
+    input { width: 100%; padding: 18px; border-radius: 12px; border: 2px solid #333; background: #050505; color: #00ff00; font-size: 20px; text-align: center; margin-bottom: 20px; font-family: monospace; box-sizing: border-box; }
+    .check-btn { width: 100%; padding: 18px; background: #1976d2; color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
+    #result { margin-top: 25px; padding: 20px; border-radius: 12px; font-size: 18px; font-weight: bold; display: none; }
+    .valid { background: rgba(46, 125, 50, 0.2); color: #4caf50; border: 2px solid #4caf50; display: block !important; }
+    .invalid { background: rgba(198, 40, 40, 0.2); color: #ff5252; border: 2px solid #ff5252; display: block !important; }
+    .back-btn { margin-top: 30px; display: inline-block; color: #555; text-decoration: none; font-size: 13px; }
   </style>
 </head>
 <body>
-  <div id="adminContent" style="display:none;">
-    <div class="admin-card">
-      <h2>管理者認証</h2>
-      <input type="number" id="checkCode" placeholder="000000" oninput="if(value.length > 6) value = value.slice(0,6);">
-      <p>管理機能をここに実装</p>
-      <a href="index.html" class="back-link">トップに戻る</a>
-    </div>
+  <div class="admin-card">
+    <h2>CODE VERIFIER</h2>
+    <p style="color: #888; font-size: 14px; margin-bottom: 10px;">コピーされたコードを貼り付けてください</p>
+    <input type="text" id="inputCode" placeholder="00000-XXXXXX">
+    <button class="check-btn" onclick="verifyCode()">真贋判定システム起動</button>
+    
+    <div id="result"></div>
+    
+    <a href="index.html" class="back-btn">管理者メニューを閉じる</a>
   </div>
+
   <script>
-    (function login() {
-      const pass = prompt("PASS:");
-      if (pass === "dorugy") { document.getElementById('adminContent').style.display = 'block'; }
-      else { window.location.href = "index.html"; }
+    // 【重要】Num.htmlと完全に一致させること
+    const SECRET_KEY = "DORU_SALT_2026"; 
+
+    function verifyCode() {
+      const input = document.getElementById('inputCode').value.trim();
+      const resDiv = document.getElementById('result');
+      
+      if (!input.includes("-")) {
+        showResult("形式エラー: '-' が含まれていません", false);
+        return;
+      }
+
+      const [rand, token] = input.split("-");
+      
+      // Admin側で、入力された数値(rand)から「本来あるべき署名」を再計算
+      const expectedToken = btoa(rand + SECRET_KEY).slice(-8, -2).toUpperCase();
+
+      // 計算結果が一致するか照合
+      if (token === expectedToken) {
+        showResult("✅ 認証成功: 本物のコードです", true);
+      } else {
+        showResult("❌ 認証失敗: 偽造されたコードです", false);
+      }
+    }
+
+    function showResult(msg, isValid) {
+      const resDiv = document.getElementById('result');
+      resDiv.innerText = msg;
+      resDiv.className = isValid ? "valid" : "invalid";
+    }
+
+    // セキュリティ用簡易パスワード（任意）
+    (function auth() {
+      const p = prompt("ADMIN PASSWORD:");
+      if (p !== "dorugy") location.href = "index.html";
     })();
   </script>
 </body>
