@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ADMIN - DORUDO SERVER</title>
+    <title>管理者照合パネル - DORUDO SERVER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #fff5f5; padding-top: 80px; color: #333; }
@@ -11,41 +11,37 @@
         .header-title { font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
         .container { width: 92%; max-width: 400px; margin: 0 auto; text-align: center; }
 
-        /* セクション共通 */
         .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid #ffcdd2; }
-        .input-style { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; margin-bottom: 20px; box-sizing: border-box; font-size: 18px; text-align: center; outline: none; transition: 0.2s; }
-        .input-style:focus { border-color: #d32f2f; }
+        .input-style { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; margin-bottom: 20px; box-sizing: border-box; font-size: 18px; text-align: center; outline: none; }
         
-        .btn-red { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #d32f2f; color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-red { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #d32f2f; color: white; font-weight: bold; cursor: pointer; font-size: 16px; margin-bottom: 10px; }
 
-        /* 管理エリア（初期非表示） */
         #adminContent { display: none; }
         
-        /* 判定表示 */
-        #resultDisplay {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-            padding: 20px;
-            border-radius: 12px;
-            transition: 0.3s;
-        }
+        #resultDisplay { margin-top: 20px; font-size: 20px; font-weight: bold; padding: 20px; border-radius: 12px; transition: 0.3s; }
         .status-waiting { color: #888; background: #f5f5f5; }
-        .status-success { color: #2e7d32; background: #e8f5e9; border: 2px solid #2e7d32; } /* 認証可 */
-        .status-error { color: #d32f2f; background: #ffebee; border: 2px solid #d32f2f; }   /* 認証不可 */
+        .status-success { color: #2e7d32; background: #e8f5e9; border: 2px solid #2e7d32; }
+        .status-error { color: #d32f2f; background: #ffebee; border: 2px solid #d32f2f; }
+
+        /* ログアウトボタン */
+        .logout-btn { display: inline-block; margin-top: 25px; color: #d32f2f; background: none; border: 1px solid #d32f2f; padding: 8px 20px; border-radius: 20px; font-size: 13px; cursor: pointer; text-decoration: none; transition: 0.2s; }
+        .logout-btn:hover { background: #fff5f5; }
+
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #888; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
 
     <div class="header-bar">
-        <span class="header-title">管理者ページ</span>
+        <a href="index.html" class="header-title">パスワード入力</a>
     </div>
 
     <div class="container">
         <div id="loginSection" class="card">
-            <h2 style="margin-top:0;">管理者パスワードを入れてください</h2>
+            <h2 style="margin-top:0;">管理者ページへのパスワード</h2>
             <input type="password" id="adminPass" class="input-style" placeholder="Password">
             <button class="btn-red" onclick="checkLogin()">ログイン</button>
+            <a href="index.html" style="font-size:13px; color:#888; text-decoration:none;">キャンセル</a>
         </div>
 
         <div id="adminContent" class="card">
@@ -54,29 +50,26 @@
 
             <div id="resultDisplay" class="status-waiting">入力待ち...</div>
             
-            <p style="font-size:11px; color:#aaa; margin-top:20px;">※認証コードを認証します</p>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i> ログアウト
+            </button>
         </div>
+
+        <a href="index.html" class="back-link">トップページに戻る</a>
     </div>
 
     <script>
-        // 指定のパスワード
         const ADMIN_PASSWORD = "dorugy";
 
         function checkLogin() {
-            const val = document.getElementById('adminPass').value;
-            if (val === ADMIN_PASSWORD) {
+            if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
                 sessionStorage.setItem('isDoruAdmin', 'true');
                 showAdmin();
-            } else { 
-                alert("パスワードが違います"); 
-            }
+            } else { alert("パスワードが違います"); }
         }
 
-        // ページ読み込み時の自動ログインチェック
         window.onload = function() {
-            if (sessionStorage.getItem('isDoruAdmin') === 'true') {
-                showAdmin();
-            }
+            if (sessionStorage.getItem('isDoruAdmin') === 'true') showAdmin();
         };
 
         function showAdmin() {
@@ -84,11 +77,15 @@
             document.getElementById('adminContent').style.display = 'block';
         }
 
+        // ログアウト処理
+        function logout() {
+            sessionStorage.removeItem('isDoruAdmin'); // セッションから削除
+            location.reload(); // ページを再読み込みしてログイン画面へ
+        }
+
         function runCheck() {
             const userInput = document.getElementById('checkInput').value.trim().toUpperCase();
             const result = document.getElementById('resultDisplay');
-
-            // Num.html(発行側)が保存したコードを取得
             const correctCode = localStorage.getItem('doru_auth_code');
 
             if (userInput.length === 0) {
@@ -97,7 +94,6 @@
                 return;
             }
 
-            // リアルタイム照合
             if (userInput === correctCode) {
                 result.innerText = "認証可";
                 result.className = "status-success";
