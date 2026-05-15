@@ -21,20 +21,20 @@
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
     .overlay.show { display: block; }
 
-    /* ヒーローセクション（画像のみ） */
+    /* ヒーローセクション（位置調整版） */
     .hero-container {
         position: relative;
         width: 100%;
-        height: auto;
-        min-height: 200px; /* スマホでの最低高さ */
-        max-height: 400px; /* PCでの最大高さ */
+        height: 250px; /* 表示する高さ */
         overflow: hidden;
         display: block;
         background: #111;
     }
     .hero-image {
         width: 100%;
-        height: auto;
+        height: 100%;
+        object-fit: cover; /* 枠に合わせて切り抜き */
+        object-position: center; /* 画像の真ん中を表示 */
         display: block;
     }
     
@@ -45,15 +45,13 @@
     /* グループタイトル */
     .group-title { text-align: left; font-size: 11px; font-weight: bold; color: #888; margin: 25px 0 10px 5px; letter-spacing: 1.5px; text-transform: uppercase; }
     
-    /* ボタンデザイン（青ベース） */
+    /* ボタンデザイン */
     .button { display: flex; align-items: center; justify-content: center; background: white; color: black; text-decoration: none; padding: 18px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 14px; font-size: 17px; transition: 0.2s; box-sizing: border-box; width: 100%; }
     .button:active { transform: scale(0.98); background: #f0f0f0; }
     
-    /* 特殊ボタン */
     .btn-update { background: #e3f2fd; border-color: #bbdefb; color: #007bff; font-weight: bold; }
     .btn-main { background: #007bff; color: white; border-color: #007bff; font-weight: bold; box-shadow: 0 4px 12px rgba(0,123,255,0.2); }
     
-    /* グリッド配置 */
     .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
     .btn-grid .button { font-size: 14px; padding: 16px 5px; margin-bottom: 0; }
     
@@ -116,9 +114,6 @@
   </div>
 
   <footer>
-    <a href="https://nagyou.net" class="responsive-banner">
-      <img src="dorudo_banner.png" alt="Host by NAGYOU" class="banner-img">
-    </a>
     <p>©2026 DORUDO SERVER Official Website</p>
   </footer>
 
