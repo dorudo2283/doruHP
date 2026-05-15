@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; }
-        
-        /* ヘッダー・サイドメニュー */
         .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
         .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
         .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
@@ -17,36 +15,23 @@
         .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
         .overlay.show { display: block; }
-
-        /* コンテンツエリア */
         .container { width: 92%; max-width: 600px; margin: 0 auto; }
         h1 { font-size: 24px; text-align: center; margin-bottom: 20px; color: #111; }
-
-        /* 検索ボックス */
         .search-container { position: sticky; top: 70px; z-index: 900; background: #f0f7ff; padding: 10px 0; }
         .search-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .search-box:focus { border-color: #007bff; background: #fff; }
-
-        /* Q&Aアコーディオン */
-        .faq-item { background: white; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ddd; overflow: hidden; transition: 0.2s; }
+        .faq-item { background: white; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ddd; overflow: hidden; }
         .faq-question { width: 100%; padding: 18px; text-align: left; background: white; border: none; outline: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-size: 15px; font-weight: bold; color: #333; }
-        .faq-question:hover { background: #f9fbff; }
         .faq-question i { color: #007bff; transition: 0.3s; }
-        
-        /* 答えの部分（初期は非表示） */
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fafafa; border-top: 0 solid #eee; }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fafafa; }
         .faq-answer-inner { padding: 18px; font-size: 14px; line-height: 1.6; color: #555; border-top: 1px solid #eee; }
-
-        /* 開いている時のスタイル */
         .faq-item.active .faq-answer { max-height: 500px; }
         .faq-item.active .faq-question i { transform: rotate(180deg); }
-
         .no-results { text-align: center; color: #888; padding: 40px 0; display: none; }
         .back-link { display: block; text-align: center; margin: 40px 0; color: #888; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
-
     <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
     <div id="sideMenu" class="side-menu">
         <a href="index.html">トップ</a>
@@ -59,7 +44,6 @@
         <a href="members.html">メンバー紹介</a>
         <a href="Admin.html">管理者パネル</a>
     </div>
-
     <div class="header-bar">
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
         <a href="index.html" class="header-title">DORUDO SERVER</a>
@@ -68,51 +52,61 @@
 
     <div class="container">
         <h1>よくある質問</h1>
-
         <div class="search-container">
-            <input type="text" id="searchInput" class="search-box" placeholder="キーワードで検索（例：入り方、はんざい）" onkeyup="filterFAQ()">
+            <input type="text" id="searchInput" class="search-box" placeholder="キーワードで検索..." onkeyup="filterFAQ()">
         </div>
 
         <div id="faqList">
-            <div class="faq-item" data-keywords="サーバー入り方 はいりかた 参加 さんか 接続 せつぞく connect">
+            <div class="faq-item" data-keywords="サーバー はいりかた 参加 さんか 接続 せつぞく connect 承認 しょうにん フレンド ふれんど">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. サーバーにはどうやって入りますか？
+                    Q. フレンド申請したのに承認されません。
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        「サーバーの入り方」ページにあるゲーマータグにフレンド申請を送り、承認されるとフレンド欄に表示されます。
+                        主が多忙な場合や、オフラインの時間は承認が遅れることがあります。24時間以上経っても承認されない場合は、公式Discordやコメント等で一度お知らせください。
                     </div>
                 </div>
             </div>
 
-            <div class="faq-item" data-keywords="認証コード にんしょうこーど 番号 ばんごう num 発行 はっこう">
+            <div class="faq-item" data-keywords="認証 にんしょう できない コード 番号 ばんごう 間違い まちがい">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. 認証コードが分かりません。
+                    Q. 認証コードを入力しても入れません。
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        メニューの「認証コード発行」ページから最新のコードを確認してください。
+                        コードは定期的に変更されます。当サイトの「認証コード発行」ページで最新のものを取得し、半角・大文字小文字に注意して入力してください。
                     </div>
                 </div>
             </div>
 
-            <div class="faq-item" data-keywords="犯罪 はんざい ルール 荒らし あらし 禁止 きんし 監獄 かんごく">
+            <div class="faq-item" data-keywords="窃盗 せっとう 泥棒 どろぼう アイテム 盗まれた ぬすまれた チェスト 荒らし あらし">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. 荒らしを見つけたらどうすればいい？
+                    Q. アイテムが盗まれたのですが。
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        すぐにお近くの管理者へ報告してください。また、証拠となるスクリーンショットを撮っておくと対応がスムーズです。
+                        窃盗は禁止事項です。ログを確認しますので、盗まれた場所、時間、アイテムの内容を管理者に報告してください。
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-keywords="重い おもい ラグ 落ちる おちる 回線 かいせん 重すぎる">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    Q. サーバーが非常に重いです。
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        参加人数が多い場合や、大規模な回路・トラップが稼働している場合に重くなることがあります。ひどい場合は一度再起動を行いますのでチャットで教えてください。
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="noResults" class="no-results">一致する質問が見つかりませんでした。</div>
-
         <a href="index.html" class="back-link">トップに戻る</a>
     </div>
 
@@ -121,34 +115,22 @@
             document.getElementById('sideMenu').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('show');
         }
-
-        // Q&Aの開閉
         function toggleFAQ(btn) {
             const item = btn.parentNode;
             item.classList.toggle('active');
         }
-
-        // 検索機能
         function filterFAQ() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const items = document.getElementsByClassName('faq-item');
             const noResults = document.getElementById('noResults');
             let hasVisible = false;
-
-            // ひらがな・カタカナを正規化して検索しやすくする処理
-            const normalize = (str) => {
-                return str.replace(/[\u30a1-\u30f6]/g, function(s) {
-                    return String.fromCharCode(s.charCodeAt(0) - 0x60);
-                });
-            };
-
+            const normalize = (str) => str.replace(/[\u30a1-\u30f6]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0x60));
             const searchLower = normalize(input);
 
             for (let i = 0; i < items.length; i++) {
                 const questionText = items[i].getElementsByClassName('faq-question')[0].innerText.toLowerCase();
                 const keywords = items[i].getAttribute('data-keywords').toLowerCase();
                 const combinedText = normalize(questionText + " " + keywords);
-
                 if (combinedText.includes(searchLower)) {
                     items[i].style.display = "";
                     hasVisible = true;
@@ -157,7 +139,6 @@
                     items[i].classList.remove('active');
                 }
             }
-
             noResults.style.display = hasVisible ? "none" : "block";
         }
     </script>
