@@ -1,54 +1,132 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>入り方 - DORUDO SERVER</title>
-  <style>
-    body { margin: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; padding-top: 80px; color: #333; }
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-    .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
-    .overlay.show { display: block; }
-    .container { width: 92%; max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-sizing: border-box; }
-    h1 { font-size: 22px; border-left: 5px solid #ff4d4d; padding-left: 15px; margin-bottom: 20px; }
-    .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
-    .info-box { background: #fffde7; border: 1px solid #fff59d; padding: 15px; border-radius: 8px; margin: 20px 0; font-family: monospace; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>サーバーの入り方 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 基本スタイル */
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; }
+        
+        /* ヘッダー */
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+
+        /* サイドメニュー */
+        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+        .side-menu.open { left: 0; }
+        .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .overlay.show { display: block; }
+
+        /* コンテンツ */
+        .container { width: 92%; max-width: 600px; margin: 0 auto; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid #007bff; }
+        h1 { font-size: 24px; text-align: center; margin-bottom: 30px; color: #111; }
+        h2 { font-size: 18px; color: #007bff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        
+        /* ゲーマータグ表示 */
+        .gt-box { background: #f8f9fa; border: 2px solid #ddd; border-radius: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; margin: 10px 0; }
+        .gt-text { font-family: monospace; font-size: 20px; font-weight: bold; color: #111; }
+        .copy-btn { background: #111; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .copy-btn:active { transform: scale(0.95); }
+
+        /* 時間表 */
+        .time-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .time-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .time-label { font-weight: bold; width: 80px; }
+        .time-value { color: #007bff; font-weight: bold; text-align: right; }
+
+        /* 注意事項 */
+        .info-box { background: #eef7ff; border-radius: 12px; padding: 15px; font-size: 14px; line-height: 1.6; color: #444; }
+
+        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
 </head>
 <body>
-  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-  <div id="sideMenu" class="side-menu">
-    <a href="index.html">トップ</a>
-    <a href="updates.html">アプデ情報</a>
-    <a href="Num.html">認証コード発行</a>
-    <a href="access.html">鯖の入り方・情報</a>
-    <a href="rules.html">ルール</a>
-    <a href="Q.html">よくある質問</a>
-    <a href="GofList.html">ワールド一覧</a>
-    <a href="members.html">メンバー紹介</a>
-    <a href="Admin.html">管理者パネル</a>
-  </div>
-  <div class="header-bar">
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
-    <a href="index.html" class="header-title">DORUDO SERVER</a>
-    <div style="width: 40px;"></div>
-  </div>
-  <div class="container">
-    <h1>サーバーの入り方</h1>
-    <p>1. 「認証コード発行」ページでコードを取得します。</p>
-    <p>2. マイクラのサーバー追加画面で以下を入力してください。</p>
-    <div class="info-box">
-      ADDRESS: (サーバーのアドレス)<br>
-      PORT: (ポート番号)
+
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="sideMenu" class="side-menu">
+        <a href="index.html">トップ</a>
+        <a href="updates.html">アプデ情報</a>
+        <a href="Num.html">認証コード発行</a>
+        <a href="access.html">鯖の入り方・情報</a>
+        <a href="rules.html">ルール</a>
+        <a href="Q.html">よくある質問</a>
+        <a href="GofList.html">ワールド一覧</a>
+        <a href="members.html">メンバー紹介</a>
+        <a href="Admin.html">管理者パネル</a>
     </div>
-    <p>3. 参加後、ロビーでコードを入力すれば認証完了です！</p>
-  </div>
-  <a href="index.html" class="back-link">トップに戻る</a>
-  <script>function toggleMenu(){document.getElementById('sideMenu').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}</script>
+
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
+        <div style="width: 40px;"></div>
+    </div>
+
+    <div class="container">
+        <h1>サーバー参加ガイド</h1>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-server"></i> サーバー形式</h2>
+            <div class="info-box">
+                ドル鯖は <strong>ホスト型サーバー</strong> です。<br>
+                サーバー主が起動している間のみ参加することが可能です。
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-user-plus"></i> 参加方法</h2>
+            <p style="font-size: 14px;"> dorudo2283 にフレンド申請をして解放時間になったら参加可能です。</p>
+            <div class="gt-box">
+                <span class="gt-text" id="gt">dorudo2283</span>
+                <button class="copy-btn" onclick="copyGT()">コピー</button>
+            </div>
+            <p style="font-size: 13px; color: #d32f2f; font-weight: bold; margin-top: 15px;">
+                <i class="fa-solid fa-comment"></i> 参加時は必ず挨拶をお願いします！
+            </p>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-clock"></i> サーバー開催時間</h2>
+            <table class="time-table">
+                <tr>
+                    <td class="time-label">平日</td>
+                    <td class="time-value">21:00 ～ 22:00</td>
+                </tr>
+                <tr>
+                    <td class="time-label">休日</td>
+                    <td class="time-value">20:00 ～ 24:00</td>
+                </tr>
+            </table>
+            <p style="font-size: 12px; color: #888; margin-top: 10px;">※主の都合により前後する場合があります。</p>
+        </div>
+
+        <a href="index.html" class="back-link">トップに戻る</a>
+    </div>
+
+    <script>
+        // サイドメニュー開閉
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+
+        // ゲーマータグコピー
+        function copyGT() {
+            const gt = document.getElementById('gt').innerText;
+            navigator.clipboard.writeText(gt).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.innerText = "完了！";
+                btn.style.background = "#28a745";
+                setTimeout(() => {
+                    btn.innerText = "コピー";
+                    btn.style.background = "#111";
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
