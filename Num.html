@@ -13,45 +13,31 @@
         h1 { font-size: 22px; margin-bottom: 25px; color: #111; }
         .input-group { text-align: left; margin-bottom: 20px; }
         .input-group label { display: block; font-size: 13px; font-weight: bold; color: #666; margin-bottom: 8px; }
-        input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: #007bff; outline: none; background: #faffff; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; font-size: 16px; box-sizing: border-box; }
         #codeDisplay { font-size: 26px; font-family: monospace; font-weight: bold; background: #f8f9fa; padding: 20px; border-radius: 12px; margin: 25px 0 10px 0; color: #007bff; border: 2px dashed #007bff; min-height: 30px; display: flex; align-items: center; justify-content: center; letter-spacing: 2px; }
-        
-        /* DM案内テキスト */
         .dm-instruction { display: none; background: #fff4f4; color: #d32f2f; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; margin-bottom: 20px; border: 1px solid #ffcdd2; }
-        
-        .main-btn { width: 100%; padding: 18px; background: #007bff; color: white; border: none; border-radius: 14px; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s; }
-        .main-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .main-btn { width: 100%; padding: 18px; background: #007bff; color: white; border: none; border-radius: 14px; font-weight: bold; font-size: 18px; cursor: pointer; }
+        .main-btn:disabled { background: #ccc; }
         .copy-btn { width: 100%; padding: 12px; background: #333; color: white; border: none; border-radius: 12px; margin-top: 10px; font-weight: bold; cursor: pointer; display: none; }
         .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
-    <div class="header-bar">
-        <a href="index.html" class="header-title">DORUDO SERVER</a>
-    </div>
+    <div class="header-bar"><a href="index.html" class="header-title">DORUDO SERVER</a></div>
     <div class="container">
         <h1>認証コード発行ポータル</h1>
         <div class="input-group">
-            <label><i class="fa-solid fa-user"></i> お名前（ニックネーム）</label>
+            <label><i class="fa-solid fa-user"></i> お名前</label>
             <input type="text" id="userName" placeholder="例: ドルド" oninput="checkInput()">
         </div>
         <div class="input-group">
-            <label><i class="fa-solid fa-gamepad"></i> Minecraft ゲーマータグ</label>
+            <label><i class="fa-solid fa-gamepad"></i> ゲーマータグ</label>
             <input type="text" id="gamerTag" placeholder="例: Steve123" oninput="checkInput()">
         </div>
-        
         <button id="genBtn" class="main-btn" onclick="generateCode()" disabled>コードを発行する</button>
-
         <div id="codeDisplay">---- - ----</div>
-        
-        <div id="dmText" class="dm-instruction">
-            <i class="fa-solid fa-paper-plane"></i> 上記の認証コードを鯖主に直接 "DM" で伝えてください
-        </div>
-
-        <button id="copyBtn" class="copy-btn" onclick="copyCode()">
-            <i class="fa-solid fa-copy"></i> コードをコピー
-        </button>
+        <div id="dmText" class="dm-instruction">上記のコードを鯖主にDMで伝えてください</div>
+        <button id="copyBtn" class="copy-btn" onclick="copyCode()"><i class="fa-solid fa-copy"></i> コードをコピー</button>
     </div>
     <a href="index.html" class="back-link">トップに戻る</a>
 
@@ -70,20 +56,19 @@
             const signature = rawToken.slice(-8, -2).toUpperCase().replace(/[+/=]/g, 'X');
             const finalCode = rand + "-" + signature;
             
+            // 重要：ここで管理側と共有する場所に保存
+            localStorage.setItem('doru_auth_code', finalCode);
+            
             document.getElementById('codeDisplay').innerText = finalCode;
             document.getElementById('copyBtn').style.display = 'block';
-            document.getElementById('dmText').style.display = 'block'; // 発行後にDM案内を表示
+            document.getElementById('dmText').style.display = 'block';
         }
         function copyCode() {
             const code = document.getElementById('codeDisplay').innerText;
             navigator.clipboard.writeText(code).then(() => {
                 const btn = document.getElementById('copyBtn');
                 btn.innerText = "コピーしました！";
-                btn.style.background = "#28a745";
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="fa-solid fa-copy"></i> コードをコピー';
-                    btn.style.background = "#333";
-                }, 2000);
+                setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> コードをコピー'; }, 2000);
             });
         }
     </script>
