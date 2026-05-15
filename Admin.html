@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>管理者ページ - DORUDO SERVER</title>
+    <title>ADMIN - DORUDO SERVER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #fff5f5; padding-top: 80px; color: #333; }
@@ -11,14 +11,15 @@
         .header-title { font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
         .container { width: 92%; max-width: 400px; margin: 0 auto; text-align: center; }
 
-        /* ログイン */
-        #loginSection { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid #ffcdd2; }
-        .input-style { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; margin-bottom: 20px; box-sizing: border-box; font-size: 18px; text-align: center; outline: none; }
-        .btn-red { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #d32f2f; color: white; font-weight: bold; cursor: pointer; }
+        /* セクション共通 */
+        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid #ffcdd2; }
+        .input-style { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; margin-bottom: 20px; box-sizing: border-box; font-size: 18px; text-align: center; outline: none; transition: 0.2s; }
+        .input-style:focus { border-color: #d32f2f; }
+        
+        .btn-red { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #d32f2f; color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
 
-        /* 検証エリア */
-        #adminContent { display: none; background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .verify-label { display: block; font-size: 14px; font-weight: bold; color: #666; margin-bottom: 15px; }
+        /* 管理エリア（初期非表示） */
+        #adminContent { display: none; }
         
         /* 判定表示 */
         #resultDisplay {
@@ -41,32 +42,41 @@
     </div>
 
     <div class="container">
-        <div id="loginSection">
-            <h2>認証コードチェッカー</h2>
+        <div id="loginSection" class="card">
+            <h2 style="margin-top:0;">管理者パスワードを入れてください</h2>
             <input type="password" id="adminPass" class="input-style" placeholder="Password">
-            <button class="btn-red" onclick="checkLogin()">Login</button>
+            <button class="btn-red" onclick="checkLogin()">ログイン</button>
         </div>
 
-        <div id="adminContent">
-            <label class="verify-label">認証コードを入力</label>
+        <div id="adminContent" class="card">
+            <label style="display:block; margin-bottom:15px; font-weight:bold; color:#666;">認証コード入力</label>
             <input type="text" id="checkInput" class="input-style" placeholder="00000-XXXXXX" oninput="runCheck()">
 
             <div id="resultDisplay" class="status-waiting">入力待ち...</div>
+            
+            <p style="font-size:11px; color:#aaa; margin-top:20px;">※認証コードを認証します</p>
         </div>
     </div>
 
     <script>
-        const ADMIN_PASSWORD = "admin";
+        // 指定のパスワード
+        const ADMIN_PASSWORD = "dorugy";
 
         function checkLogin() {
-            if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
-                sessionStorage.setItem('isAdmin', 'true');
+            const val = document.getElementById('adminPass').value;
+            if (val === ADMIN_PASSWORD) {
+                sessionStorage.setItem('isDoruAdmin', 'true');
                 showAdmin();
-            } else { alert("Password Error"); }
+            } else { 
+                alert("パスワードが違います"); 
+            }
         }
 
+        // ページ読み込み時の自動ログインチェック
         window.onload = function() {
-            if (sessionStorage.getItem('isAdmin') === 'true') showAdmin();
+            if (sessionStorage.getItem('isDoruAdmin') === 'true') {
+                showAdmin();
+            }
         };
 
         function showAdmin() {
@@ -78,17 +88,16 @@
             const userInput = document.getElementById('checkInput').value.trim().toUpperCase();
             const result = document.getElementById('resultDisplay');
 
-            // Num.htmlで発行され、localStorageに保存されている「正解」を取得
+            // Num.html(発行側)が保存したコードを取得
             const correctCode = localStorage.getItem('doru_auth_code');
 
-            // 入力中
             if (userInput.length === 0) {
                 result.innerText = "入力待ち...";
                 result.className = "status-waiting";
                 return;
             }
 
-            // 照合（ Num.htmlの発行形式と完全一致するか ）
+            // リアルタイム照合
             if (userInput === correctCode) {
                 result.innerText = "認証可";
                 result.className = "status-success";
