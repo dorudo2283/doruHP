@@ -1,70 +1,105 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ADMIN PANEL - 検証</title>
-  <style>
-    body { font-family: sans-serif; background: #000; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-    .admin-card { width: 100%; max-width: 450px; background: #1a1a1a; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; }
-    h2 { color: #ff4d4d; margin-bottom: 25px; }
-    input { width: 100%; padding: 18px; border-radius: 12px; border: 2px solid #333; background: #050505; color: #00ff00; font-size: 20px; text-align: center; margin-bottom: 20px; font-family: monospace; box-sizing: border-box; }
-    .check-btn { width: 100%; padding: 18px; background: #1976d2; color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; }
-    #result { margin-top: 25px; padding: 20px; border-radius: 12px; font-size: 18px; font-weight: bold; display: none; }
-    .valid { background: rgba(46, 125, 50, 0.2); color: #4caf50; border: 2px solid #4caf50; display: block !important; }
-    .invalid { background: rgba(198, 40, 40, 0.2); color: #ff5252; border: 2px solid #ff5252; display: block !important; }
-    .back-btn { margin-top: 30px; display: inline-block; color: #555; text-decoration: none; font-size: 13px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>認証コード入力 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; }
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .header-title { font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        
+        .container { width: 92%; max-width: 400px; margin: 0 auto; text-align: center; }
+        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        h2 { font-size: 20px; margin-bottom: 10px; }
+        .description { font-size: 13px; color: #888; margin-bottom: 25px; }
+
+        /* 入力エリア */
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 32px;
+            font-weight: bold;
+            text-align: center;
+            letter-spacing: 8px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.2s;
+            font-family: monospace;
+        }
+        .code-input:focus { border-color: #007bff; background: #f8fbff; }
+
+        /* 判定ステータス表示 */
+        #statusDisplay {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+        
+        /* 文言ごとの色設定 */
+        .status-waiting { color: #888; background: #f5f5f5; } /* 入力待ち... */
+        .status-success { color: #2e7d32; background: #e8f5e9; } /* 認証可 */
+        .status-error { color: #d32f2f; background: #ffebee; }   /* 認証不可 */
+
+        .back-link { display: block; text-align: center; margin-top: 30px; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
 </head>
 <body>
-  <div class="admin-card">
-    <h2>CODE VERIFIER</h2>
-    <p style="color: #888; font-size: 14px; margin-bottom: 10px;">コピーされたコードを貼り付けてください</p>
-    <input type="text" id="inputCode" placeholder="00000-XXXXXX">
-    <button class="check-btn" onclick="verifyCode()">判定</button>
-    
-    <div id="result"></div>
-    
-    <a href="index.html" class="back-btn">管理者メニューを閉じる</a>
-  </div>
 
-  <script>
-    // 【重要】Num.htmlと完全に一致させること
-    const SECRET_KEY = "DORU_SALT_2026"; 
+    <div class="header-bar">
+        <a href="index.html" class="header-title">AUTHENTICATION</a>
+    </div>
 
-    function verifyCode() {
-      const input = document.getElementById('inputCode').value.trim();
-      const resDiv = document.getElementById('result');
-      
-      if (!input.includes("-")) {
-        showResult("形式エラー: '-' が含まれていません", false);
-        return;
-      }
+    <div class="container">
+        <div class="card">
+            <h2>認証コード確認</h2>
+            <p class="description">管理者が発行した4桁のコードを入力してください</p>
+            
+            <input type="tel" id="authInput" class="code-input" maxlength="4" placeholder="0000" oninput="checkCode()">
+            
+            <div id="statusDisplay" class="status-waiting">入力待ち...</div>
+        </div>
 
-      const [rand, token] = input.split("-");
-      
-      // Admin側で、入力された数値(rand)から「本来あるべき署名」を再計算
-      const expectedToken = btoa(rand + SECRET_KEY).slice(-8, -2).toUpperCase();
+        <a href="index.html" class="back-link">トップに戻る</a>
+    </div>
 
-      // 計算結果が一致するか照合
-      if (token === expectedToken) {
-        showResult("✅ 認証成功: 本物のコードです", true);
-      } else {
-        showResult("❌ 認証失敗: 偽造されたコードです", false);
-      }
-    }
+    <script>
+        function checkCode() {
+            const inputField = document.getElementById('authInput');
+            const statusDisplay = document.getElementById('statusDisplay');
+            const userInput = inputField.value;
 
-    function showResult(msg, isValid) {
-      const resDiv = document.getElementById('result');
-      resDiv.innerText = msg;
-      resDiv.className = isValid ? "valid" : "invalid";
-    }
+            // 管理者が Admin.html で保存した最新コードを取得
+            const correctCode = localStorage.getItem('doru_auth_code');
 
-    // セキュリティ用簡易パスワード（任意）
-    (function auth() {
-      const p = prompt("パスワードを入力してください");
-      if (p !== "dorugy") location.href = "index.html";
-    })();
-  </script>
+            // 1. 入力中（4文字未満）
+            if (userInput.length < 4) {
+                statusDisplay.innerText = "入力待ち...";
+                statusDisplay.className = "status-waiting";
+                return;
+            }
+
+            // 2. 4文字入力された時の判定
+            if (userInput === correctCode) {
+                statusDisplay.innerText = "認証可";
+                statusDisplay.className = "status-success";
+            } else {
+                statusDisplay.innerText = "認証不可";
+                statusDisplay.className = "status-error";
+            }
+        }
+
+        // ページ読み込み時にリセット
+        window.onload = function() {
+            document.getElementById('authInput').value = "";
+        }
+    </script>
 </body>
 </html>
