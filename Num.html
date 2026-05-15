@@ -1,62 +1,77 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>認証コード発行 - DORUDO SERVER</title>
-  <style>
-    body { margin: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; padding-top: 80px; color: #333; }
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000; }
-    .header-title { font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-    .container { width: 92%; max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; box-sizing: border-box; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    h1 { font-size: 20px; margin-bottom: 20px; color: #111; }
-    #codeDisplay { font-size: 28px; font-family: monospace; font-weight: bold; background: #f0f0f0; padding: 20px; border-radius: 12px; margin: 20px 0; color: #ff4d4d; border: 2px dashed #ccc; min-height: 35px; }
-    .btn-group { display: flex; flex-direction: column; gap: 10px; }
-    .main-btn { width: 100%; padding: 16px; background: #ff4d4d; color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
-    .copy-btn { width: 100%; padding: 12px; background: #333; color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 14px; cursor: pointer; display: none; }
-    .main-btn:active, .copy-btn:active { transform: scale(0.98); opacity: 0.8; }
-    .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>認証コード発行 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; }
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .header-title { font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        .container { width: 92%; max-width: 500px; margin: 0 auto; background: white; padding: 35px; border-radius: 20px; box-sizing: border-box; text-align: center; box-shadow: 0 10px 25px rgba(0, 123, 255, 0.1); border-top: 5px solid #007bff; }
+        h1 { font-size: 22px; margin-bottom: 25px; color: #111; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 13px; font-weight: bold; color: #666; margin-bottom: 8px; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; font-size: 16px; box-sizing: border-box; transition: 0.3s; }
+        input:focus { border-color: #007bff; outline: none; background: #faffff; }
+        #codeDisplay { font-size: 26px; font-family: monospace; font-weight: bold; background: #f8f9fa; padding: 20px; border-radius: 12px; margin: 25px 0; color: #007bff; border: 2px dashed #007bff; min-height: 30px; display: flex; align-items: center; justify-content: center; letter-spacing: 2px; }
+        .main-btn { width: 100%; padding: 18px; background: #007bff; color: white; border: none; border-radius: 14px; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s; }
+        .main-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .copy-btn { width: 100%; padding: 12px; background: #333; color: white; border: none; border-radius: 12px; margin-top: 10px; font-weight: bold; cursor: pointer; display: none; }
+        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
 </head>
 <body>
-  <div class="header-bar"><a href="index.html" class="header-title">DORUDO SERVER</a></div>
-  <div class="container">
-    <h1>認証コード発行</h1>
-    <p style="font-size: 14px; color: #666;">ボタンを押してコードを生成し、<br>コピーして鯖主に ”DM” で送ってください。</p>
-    <div id="codeDisplay">---- - ----</div>
-    <div class="btn-group">
-      <button class="main-btn" onclick="generateSecureCode()">コードを発行</button>
-      <button id="copyBtn" class="copy-btn" onclick="copyToClipboard()">コードをコピーする</button>
+    <div class="header-bar">
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
     </div>
-  </div>
-  <a href="index.html" class="back-link">トップに戻る</a>
-
-  <script>
-    // 【重要】Admin.htmlと共通にする秘密の合言葉
-    const SECRET_KEY = "DORU_SALT_2026"; 
-
-    function generateSecureCode() {
-      const rand = Math.floor(Math.random() * 90000) + 10000; // 5桁のランダム数値
-      // 署名生成: 数値と秘密鍵を混ぜてBase64化し、末尾6文字を抽出
-      const signature = btoa(rand + SECRET_KEY).slice(-8, -2).toUpperCase();
-      const finalCode = rand + "-" + signature;
-      
-      document.getElementById('codeDisplay').innerText = finalCode;
-      document.getElementById('copyBtn').style.display = 'block';
-    }
-
-    function copyToClipboard() {
-      const code = document.getElementById('codeDisplay').innerText;
-      navigator.clipboard.writeText(code).then(() => {
-        const btn = document.getElementById('copyBtn');
-        btn.innerText = "コピー完了！";
-        btn.style.background = "#4caf50";
-        setTimeout(() => {
-          btn.innerText = "コードをコピーする";
-          btn.style.background = "#333";
-        }, 2000);
-      });
-    }
-  </script>
+    <div class="container">
+        <h1>認証コード発行ポータル</h1>
+        <div class="input-group">
+            <label><i class="fa-solid fa-user"></i> 名前（ニックネームでも可）</label>
+            <input type="text" id="userName" placeholder="例: ドルド" oninput="checkInput()">
+        </div>
+        <div class="input-group">
+            <label><i class="fa-solid fa-gamepad"></i> ゲーマータグ（ID）</label>
+            <input type="text" id="gamerTag" placeholder="例: Steve123" oninput="checkInput()">
+        </div>
+        <button id="genBtn" class="main-btn" onclick="generateCode()" disabled>コードを発行する</button>
+        <div id="codeDisplay">---- - ----</div>
+        <button id="copyBtn" class="copy-btn" onclick="copyCode()">
+            <i class="fa-solid fa-copy"></i> コードをコピー
+        </button>
+    </div>
+    <a href="index.html" class="back-link">トップに戻る</a>
+    <script>
+        const SECRET_KEY = "DORU_BLUE_2026";
+        function checkInput() {
+            const name = document.getElementById('userName').value.trim();
+            const tag = document.getElementById('gamerTag').value.trim();
+            document.getElementById('genBtn').disabled = (name === "" || tag === "");
+        }
+        function generateCode() {
+            const name = document.getElementById('userName').value.trim();
+            const tag = document.getElementById('gamerTag').value.trim();
+            const rand = Math.floor(Math.random() * 90000) + 10000;
+            const rawToken = btoa(unescape(encodeURIComponent(name + tag + rand + SECRET_KEY)));
+            const signature = rawToken.slice(-8, -2).toUpperCase().replace(/[+/=]/g, 'X');
+            const finalCode = rand + "-" + signature;
+            document.getElementById('codeDisplay').innerText = finalCode;
+            document.getElementById('copyBtn').style.display = 'block';
+        }
+        function copyCode() {
+            const code = document.getElementById('codeDisplay').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('copyBtn');
+                btn.innerText = "コピーしました！";
+                btn.style.background = "#28a745";
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-solid fa-copy"></i> コードをコピー';
+                    btn.style.background = "#333";
+                }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
