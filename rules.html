@@ -1,65 +1,149 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ルール - DORUDO SERVER</title>
-  <style>
-    /* 共通スタイル */
-    body { margin: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; padding-top: 80px; color: #333; }
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-    .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
-    .overlay.show { display: block; }
-    /* ページ固有 */
-    .container { width: 92%; max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-sizing: border-box; }
-    h1 { font-size: 22px; border-left: 5px solid #ff4d4d; padding-left: 15px; margin-bottom: 20px; }
-    h2 { font-size: 18px; color: #ff4d4d; margin-top: 25px; }
-    .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 10px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>利用規約 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; line-height: 1.6; }
+        
+        /* ヘッダー・サイドメニュー（共通） */
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+        .side-menu.open { left: 0; }
+        .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .overlay.show { display: block; }
+
+        /* コンテンツエリア */
+        .container { width: 92%; max-width: 700px; margin: 0 auto; padding-bottom: 50px; }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 30px; color: #111; }
+        
+        .section-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        .section-title { font-size: 20px; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        /* 規約リスト */
+        .rule-item { margin-bottom: 20px; }
+        .rule-header { font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .rule-desc { font-size: 14px; color: #555; padding-left: 28px; }
+        
+        /* 警告・処分の強調 */
+        .punishment { color: #d32f2f; font-weight: bold; }
+        .notice { background: #fff4f4; border-left: 4px solid #d32f2f; padding: 10px; margin-top: 5px; border-radius: 4px; }
+
+        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
 </head>
 <body>
-  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-  <div id="sideMenu" class="side-menu">
-    <a href="index.html">トップ</a>
-    <a href="updates.html">アプデ情報</a>
-    <a href="Num.html">認証コード発行</a>
-    <a href="access.html">鯖の入り方・情報</a>
-    <a href="rules.html">ルール</a>
-    <a href="Q.html">よくある質問</a>
-    <a href="GofList.html">ワールド一覧</a>
-    <a href="members.html">メンバー紹介</a>
-    <a href="Admin.html">管理者パネル</a>
-  </div>
-  <div class="header-bar">
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
-    <a href="index.html" class="header-title">DORUDO SERVER</a>
-    <div style="width: 40px;"></div>
-  </div>
-  <div class="container">
-    <h1>サーバー利用規約</h1>
-    <p>楽しく安全に遊ぶためのルールです。</p>
-    <h2>禁止事項</h2>
-    <ul>
-      <li>誹謗中傷・荒らし行為</li>
-      <li>チート・バグの悪用</li>
-      <li>他人の建築物の破壊</li>
-    </ul>
-    <h2>免責事項</h2>
-    <p>管理者はトラブルの責任を負いかねます。</p>
-  </div>
-  <a href="index.html" class="back-link">トップに戻る</a>
-  <script>
-    function toggleMenu() {
-      document.getElementById('sideMenu').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('show');
-    }
-  </script>
+
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="sideMenu" class="side-menu">
+        <a href="index.html">トップ</a>
+        <a href="updates.html">アプデ情報</a>
+        <a href="Num.html">認証コード発行</a>
+        <a href="access.html">鯖の入り方・情報</a>
+        <a href="rules.html">ルール</a>
+        <a href="Q.html">よくある質問</a>
+        <a href="GofList.html">ワールド一覧</a>
+        <a href="members.html">メンバー紹介</a>
+        <a href="Admin.html">管理者パネル</a>
+    </div>
+
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
+        <div style="width: 40px;"></div>
+    </div>
+
+    <div class="container">
+        <h1>利用規約（ルール）</h1>
+
+        <div class="section-card">
+            <div class="section-title"><i class="fa-solid fa-flag"></i> 基本方針</div>
+            <div class="rule-item">
+                <div class="rule-header">1. 楽しみの共有</div>
+                <div class="rule-desc">全てのプレイヤーが心から楽しみ、笑顔で遊べるサーバーを目指します。</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-header">2. バランスの維持</div>
+                <div class="rule-desc">便利さを追求しつつも、サバイバル本来の楽しさやゲームバランスを損なわない運営を心がけます。</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-header">3. 相互の敬意</div>
+                <div class="rule-desc">初心者から熟練者まで、全員が対等に敬意を持って接することを大切にします。</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title"><i class="fa-solid fa-gavel"></i> 一般規約</div>
+            <div class="rule-item">
+                <div class="rule-header"><i class="fa-solid fa-circle-exclamation"></i> 荒らし</div>
+                <div class="rule-desc">鯖内での荒らしは一切許可していません。<span class="punishment">荒らしを発見した場合、即キックまたはBANとなります。</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-header"><i class="fa-solid fa-triangle-exclamation"></i> 迷惑行為</div>
+                <div class="rule-desc">鯖内での迷惑行為を発見した場合は、一定の処分が下されます。また、迷惑度によってはキックやBANもあり得ますのでご注意ください。</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-header"><i class="fa-solid fa-comment-slash"></i> 差別的発言・暴言</div>
+                <div class="rule-desc">チャットまたはその他方法で暴言または過度に不快な言葉を発した場合は厳重注意となります。</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-header"><i class="fa-solid fa-user-slash"></i> 差別的行為・不快な行為</div>
+                <div class="rule-desc">差別的発言または過度に不快な行為を行った場合は厳重注意またはキック処分となります。</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title"><i class="fa-solid fa-swords"></i> PVP規約</div>
+            <div class="rule-item">
+                <div class="rule-header">許可地以外での戦闘</div>
+                <div class="rule-desc">許可地以外での戦闘はおやめください。口頭注意またはキックなどを行います。</div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-header">相手を倒した後の煽り</div>
+                <div class="rule-desc">戦闘に勝利した後に相手に対してあおりなどを行わないでください。発見次第厳重注意を行います。</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title"><i class="fa-solid fa-bug"></i> バグについて</div>
+            <div class="rule-item">
+                <div class="rule-header">バグの悪用について</div>
+                <div class="rule-desc">バグを見つけたら必ず運営または鯖主に報告してください。<span class="punishment">それを悪用した場合はキックまたはBAN処分となります。</span></div>
+            </div>
+            <div class="rule-item">
+                <div class="rule-header">バグの報告義務</div>
+                <div class="rule-desc">バグを発見した場合は必ず運営または鯖主に報告してください。もし、この報告義務を無視した場合は口頭注意を行います。</div>
+            </div>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title"><i class="fa-solid fa-shield-xmark"></i> 処分について</div>
+            <div class="rule-item">
+                <div class="rule-desc">
+                    各規約に違反した場合、運営チームの判断により以下の処分を下します。<br><br>
+                    1. <strong>口頭注意 / 厳重注意</strong>：問題行動の是正を求めます。<br>
+                    2. <strong>キック</strong>：強制退出処分です。再入室は可能ですが繰り返す場合はBANへ移行します。<br>
+                    3. <strong>BAN (アクセス禁止)</strong>：サーバーへの一切の立ち入りを禁止します。悪質な荒らしや再三の注意無視が対象です。
+                </div>
+                <div class="notice">
+                    ※処分の重さは、行為の悪質性や過去の注意歴を考慮して決定されます。
+                </div>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">トップに戻る</a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+    </script>
 </body>
 </html>
