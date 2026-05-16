@@ -23,7 +23,7 @@
     </style>
 </head>
 <body>
-    <div class="header-bar"><a href="index.html" class="header-title">管理者専用ログイン</a></div>
+    <div class="header-bar"><a href="index.html" class="header-title">管理者ログイン</a></div>
     <div class="container">
         <div id="loginSection" class="card">
             <h2 style="margin-top:0;">管理者パスワードを入力</h2>
@@ -31,8 +31,8 @@
             <button class="btn-red" onclick="checkLogin()">ログイン</button>
         </div>
         <div id="adminContent" class="card">
-            <label style="display:block; margin-bottom:15px; font-weight:bold; color:#666;">認証コードを入力</label>
-            <input type="text" id="checkInput" class="input-style" placeholder="00000-XXXXXX" oninput="runCheck()">
+            <label style="display:block; margin-bottom:15px; font-weight:bold; color:#666;">認証するコードを入力</label>
+            <input type="text" id="checkInput" class="input-style" placeholder="00000-XXXXXX" maxlength="12" oninput="runCheck()">
             <div id="resultDisplay" class="status-waiting">入力待ち...</div>
             <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> ログアウト</button>
         </div>
@@ -58,16 +58,25 @@
             sessionStorage.removeItem('isDoruAdmin');
             location.reload();
         }
+        
         function runCheck() {
-            const userInput = document.getElementById('checkInput').value.trim().toUpperCase();
+            const inputElement = document.getElementById('checkInput');
+            let val = inputElement.value.trim().toUpperCase();
+
+            // 【自動ハイフン挿入ロジック】
+            // ハイフンがなく、数字が6桁以上入力されたら、5桁目の後ろにハイフンを自動挿入
+            if (!val.includes("-") && val.length >= 6) {
+                val = val.slice(0, 5) + "-" + val.slice(5);
+                inputElement.value = val; // 画面の入力欄に反映
+            }
+
             const result = document.getElementById('resultDisplay');
-            // Num.html が保存した「正解」を呼び出す
             const correctCode = localStorage.getItem('doru_auth_code');
 
-            if (userInput.length === 0) {
+            if (val.length === 0) {
                 result.innerText = "入力待ち...";
                 result.className = "status-waiting";
-            } else if (userInput === correctCode) {
+            } else if (val === correctCode) {
                 result.innerText = "認証可";
                 result.className = "status-success";
             } else {
