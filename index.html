@@ -6,8 +6,8 @@
   <title>DORUDO SERVER 公式</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    /* 基本設定（無駄な色を排除し、引き締まった配色に） */
-    body { margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #fafafa; padding-top: 60px; color: #1a1a1a; touch-action: manipulation; }
+    /* 基本設定（背景をわずかにグレーにし、白いボタンの立体感を強調） */
+    body { margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #f5f7fa; padding-top: 60px; color: #1a1a1a; touch-action: manipulation; }
     
     /* ヘッダー */
     .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
@@ -41,25 +41,60 @@
     
     /* コンテンツエリア */
     .container { width: 92%; max-width: 500px; margin: 40px auto; text-align: center; box-sizing: border-box; }
-    .sub-text { color: #666; margin-bottom: 40px; font-size: 14px; line-height: 1.6; font-weight: 400; }
+    .sub-text { color: #555; margin-bottom: 40px; font-size: 14px; line-height: 1.6; font-weight: 400; }
     
-    /* グループタイトル（余白とフォントサイズを緻密に調整） */
-    .group-title { text-align: left; font-size: 11px; font-weight: 700; color: #999; margin: 35px 0 12px 4px; letter-spacing: 2px; text-transform: uppercase; }
+    /* グループタイトル */
+    .group-title { text-align: left; font-size: 11px; font-weight: 700; color: #8a99ad; margin: 35px 0 12px 4px; letter-spacing: 2px; text-transform: uppercase; }
     
-    /* ボタンデザイン（AI感のあるグラデや派手な影を廃止、フラットかつ強固に） */
-    .button { display: flex; align-items: center; justify-content: center; background: white; color: #1a1a1a; text-decoration: none; padding: 16px; margin-bottom: 12px; border: 1px solid #e5e5e5; border-radius: 12px; font-size: 15px; font-weight: 600; transition: 0.2s; box-sizing: border-box; width: 100%; }
-    .button:active { transform: scale(0.98); background: #f5f5f5; border-color: #ddd; }
+    /* 🔴 ボタン基本設定（かざした時に浮くアニメーションのベース） */
+    .button { 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        background: white; 
+        color: #1a1a1a; 
+        text-decoration: none; 
+        padding: 16px; 
+        margin-bottom: 14px; 
+        border: 1px solid rgba(0, 0, 0, 0.06); 
+        border-radius: 12px; 
+        font-size: 15px; 
+        font-weight: 600; 
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02); /* 初期状態の軽い影 */
+        transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s; 
+        box-sizing: border-box; 
+        width: 100%; 
+    }
     
-    /* アプデ情報：ゲームらしさを出す控えめなブルー */
-    .btn-update { background: #f0f6ff; border-color: #d8e7fe; color: #0066cc; }
-    .btn-update:active { background: #e1edfe; }
+    /* 🔴 ホバー（かざした時）の共通エフェクト：上に浮き上がり、影を深くする */
+    @media (hover: hover) {
+        .button:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+        }
+    }
     
-    /* メインボタン：ソリッドな黒で引き締める */
-    .btn-main { background: #111; color: white; border-color: #111; }
-    .btn-main:active { background: #333; border-color: #333; }
+    /* タップ・クリックした瞬間（沈む挙動でコントロール感を演出） */
+    .button:active { 
+        transform: translateY(-1px); 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+    }
+    
+    /* 🔵 アプデ情報：存在感のあるディープブルーのライト版 */
+    .btn-update { background: #e6f0fa; border-color: #c8def5; color: #0052cc; }
+    @media (hover: hover) {
+        .btn-update:hover { background: #edf5fc; border-color: #b5d2f2; }
+    }
+    
+    /* 🔵 メインボタン：力強く、深いソリッドな「ドル鯖ディープブルー」 */
+    .btn-main { background: #0052cc; color: white; border-color: #0047b3; }
+    @media (hover: hover) {
+        .btn-main:hover { background: #0066ff; border-color: #0066ff; color: white; }
+    }
+    .btn-main:active { background: #0047b3; }
     
     /* グリッド配置 */
-    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
     .btn-grid .button { font-size: 14px; padding: 16px 5px; margin-bottom: 0; }
     
     footer { text-align: center; padding: 60px 0 40px 0; color: #aaa; font-size: 11px; letter-spacing: 0.5px; }
