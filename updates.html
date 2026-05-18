@@ -1,57 +1,174 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>アプデ情報 - DORUDO SERVER</title>
-  <style>
-    body { margin: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; padding-top: 80px; color: #333; }
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-    .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
-    .overlay.show { display: block; }
-    .container { width: 92%; max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-sizing: border-box; }
-    h1 { font-size: 22px; border-left: 5px solid #ff4d4d; padding-left: 15px; margin-bottom: 20px; }
-    .update-card { border-bottom: 1px solid #eee; padding: 15px 0; }
-    .date { font-size: 12px; color: #999; font-weight: bold; }
-    .badge { display: inline-block; padding: 2px 8px; font-size: 10px; border-radius: 4px; background: #ff4d4d; color: #fff; margin-left: 5px; }
-    .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>アプデ情報 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; }
+        
+        /* ヘッダー・共通UI */
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        
+        /* サイドメニュー */
+        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+        .side-menu.open { left: 0; }
+        .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .overlay.show { display: block; }
+
+        /* コンテンツエリア */
+        .container { width: 92%; max-width: 600px; margin: 0 auto; }
+        h1 { font-size: 24px; text-align: center; margin-bottom: 20px; color: #111; }
+
+        /* 検索・ソートコントロール群 */
+        .control-panel { background: white; padding: 15px; border-radius: 16px; border: 1px solid #ddd; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 10px; }
+        .control-row { display: flex; gap: 10px; align-items: center; }
+        .control-label { font-size: 12px; font-weight: bold; color: #666; min-width: 70px; }
+        .input-date, .select-sort { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 14px; outline: none; background: #fff; }
+        .clear-btn { padding: 10px 15px; background: #666; color: white; border: none; border-radius: 8px; font-size: 12px; cursor: pointer; font-weight: bold; }
+
+        /* アプデ記事カード（量産ブロック） */
+        .update-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #ddd; margin-bottom: 20px; }
+        .update-date { font-size: 14px; color: #007bff; font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .update-title { font-size: 18px; font-weight: bold; color: #111; margin: 0 0 12px 0; }
+        
+        /* リリストの装飾 */
+        .update-list { margin: 0; padding-left: 20px; color: #555; font-size: 14px; line-height: 1.6; }
+        .update-list li { margin-bottom: 6px; }
+
+        .no-updates { text-align: center; color: #888; padding: 30px 0; display: none; font-size: 14px; }
+        .back-link { display: block; text-align: center; margin: 40px 0; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
 </head>
 <body>
-  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-  <div id="sideMenu" class="side-menu">
-    <a href="index.html">トップ</a>
-    <a href="updates.html">アプデ情報</a>
-    <a href="Num.html">認証コード発行</a>
-    <a href="access.html">鯖の入り方・情報</a>
-    <a href="rules.html">ルール</a>
-    <a href="Q.html">よくある質問</a>
-    <a href="GofList.html">ワールド一覧</a>
-    <a href="members.html">メンバー紹介</a>
-    <a href="Admin.html">管理者パネル</a>
-  </div>
-  <div class="header-bar">
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
-    <a href="index.html" class="header-title">DORUDO SERVER</a>
-    <div style="width: 40px;"></div>
-  </div>
-  <div class="container">
-    <h1>アップデート情報</h1>
-    <div class="update-card">
-      <span class="date">2026.02.21</span><span class="badge">NEW</span>
-      <p>ホームページのデザインを大幅にリニューアルしました。</p>
+
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="sideMenu" class="side-menu">
+        <a href="index.html">トップ</a>
+        <a href="updates.html">アプデ情報</a>
+        <a href="Num.html">認証コード発行</a>
+        <a href="access.html">鯖の入り方・情報</a>
+        <a href="rules.html">ルール</a>
+        <a href="Q.html">よくある質問</a>
+        <a href="GofList.html">ワールド一覧</a>
+        <a href="members.html">メンバー紹介</a>
+        <a href="Admin.html">管理者パネル</a>
     </div>
-    <div class="update-card">
-      <span class="date">2026.02.15</span>
-      <p>認証システムを更新しました。Num.htmlより再発行が可能です。</p>
+
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
+        <div style="width: 40px;"></div>
     </div>
-  </div>
-  <a href="index.html" class="back-link">トップに戻る</a>
-  <script>function toggleMenu(){document.getElementById('sideMenu').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}</script>
+
+    <div class="container">
+        <h1>アップデート情報</h1>
+
+        <div class="control-panel">
+            <div class="control-row">
+                <span class="control-label"><i class="fa-regular fa-calendar-days"></i> 日付検索</span>
+                <input type="date" id="searchDate" class="input-date" onchange="filterAndSortUpdates()">
+                <button class="clear-btn" onclick="clearDateFilter()">解除</button>
+            </div>
+            <div class="control-row">
+                <span class="control-label"><i class="fa-solid fa-sort"></i> 並び替え</span>
+                <select id="sortOrder" class="select-sort" onchange="filterAndSortUpdates()">
+                    <option value="new">新しい順</option>
+                    <option value="old">古い順</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="updateContainer">
+            
+            <div class="update-card" data-date="2026-05-18">
+                <div class="update-date"><i class="fa-regular fa-calendar"></i> 2026/05/18</div>
+                <h2 class="update-title">アップデートページの更新</h2>
+                <ul class="update-list">
+                    <li>ドル鯖公式HPのアップデートページを更新しました。主に、日付検索機能や昇降表示が可能になりました。</li>
+                </ul>
+            </div>
+            
+          <div class="update-card" data-date="2026-04-10">
+                <div class="update-date"><i class="fa-regular fa-calendar"></i> 2026/05/18</div>
+                <h2 class="update-title">新MAPの報告</h2>
+                <ul class="update-list">
+                    <li>時期ドル鯖の新MAPのジャンルを決定しました。ジャンルは...「PVE」です！とはいっても普通のPVEじゃ飽きると思うので自分なりに工夫して作っていきたいと思います。</li>
+                </ul>
+            </div>
+
+            <div class="update-card" data-date="2026-03-01">
+                <div class="update-date"><i class="fa-regular fa-calendar"></i> 2026/05/18</div>
+                <h2 class="update-title">....</h2>
+                <ul class="update-list">
+                    <li>non..</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div id="noUpdatesMessage" class="no-updates">指定された条件のアップデートはありません。</div>
+
+        <a href="index.html" class="back-link">トップに戻る</a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+
+        // 日付クリアボタンの処理
+        function clearDateFilter() {
+            document.getElementById('searchDate').value = "";
+            filterAndSortUpdates();
+        }
+
+        // 検索と並び替えを同時に処理するコアシステム
+        function filterAndSortUpdates() {
+            const container = document.getElementById('updateContainer');
+            const cards = Array.from(container.getElementsByClassName('update-card'));
+            const searchDate = document.getElementById('searchDate').value; // YYYY-MM-DD 形式
+            const sortOrder = document.getElementById('sortOrder').value;
+            const noResults = document.getElementById('noUpdatesMessage');
+            
+            let visibleCount = 0;
+
+            // 1. フィルタリング（日付チェック）
+            cards.forEach(card => {
+                const cardDate = card.getAttribute('data-date'); // YYYY-MM-DD
+                
+                if (!searchDate || cardDate === searchDate) {
+                    card.style.display = "";
+                    visibleCount++;
+                } else {
+                    card.style.display = "none";
+                }
+            });
+
+            // 結果ゼロのメッセージ表示制御
+            noResults.style.display = visibleCount === 0 ? "block" : "none";
+
+            // 2. ソート（並び替え）処理
+            cards.sort((a, b) => {
+                const dateA = new Date(a.getAttribute('data-date'));
+                const dateB = new Date(b.getAttribute('data-date'));
+                
+                return sortOrder === 'new' ? dateB - dateA : dateA - dateB;
+            });
+
+            // 3. 並び替えた結果をHTMLコンテナに再配置
+            cards.forEach(card => container.appendChild(card));
+        }
+
+        // 初回読み込み時に自動で並び替えを適用
+        window.onload = function() {
+            filterAndSortUpdates();
+        };
+    </script>
 </body>
 </html>
