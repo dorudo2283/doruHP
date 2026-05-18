@@ -6,26 +6,27 @@
   <title>DORUDO SERVER 公式</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    /* 基本設定 */
-    body { margin: 0; font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; background: #f0f7ff; padding-top: 60px; color: #333; touch-action: manipulation; }
+    /* 基本設定（無駄な色を排除し、引き締まった配色に） */
+    body { margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #fafafa; padding-top: 60px; color: #1a1a1a; touch-action: manipulation; }
     
     /* ヘッダー */
     .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
     .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; white-space: nowrap; }
+    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: 16px; text-decoration: none; color: #fff; white-space: nowrap; letter-spacing: 1px; }
     
     /* サイドメニュー */
     .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
     .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+    .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; }
+    .side-menu a:hover { color: #fff; background: #222; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
     .overlay.show { display: block; }
 
-    /* ヒーローセクション（位置調整版） */
+    /* ヒーローセクション */
     .hero-container {
         position: relative;
         width: 100%;
-        height: 250px; /* 表示する高さ */
+        height: 280px;
         overflow: hidden;
         display: block;
         background: #111;
@@ -33,31 +34,35 @@
     .hero-image {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* 枠に合わせて切り抜き */
-        object-position: center; /* 画像の真ん中を表示 */
+        object-fit: cover;
+        object-position: center;
         display: block;
     }
     
     /* コンテンツエリア */
-    .container { width: 92%; max-width: 600px; margin: 30px auto; text-align: center; box-sizing: border-box; }
-    .sub-text { color: #666; margin-bottom: 35px; font-size: 14px; line-height: 1.5; }
+    .container { width: 92%; max-width: 500px; margin: 40px auto; text-align: center; box-sizing: border-box; }
+    .sub-text { color: #666; margin-bottom: 40px; font-size: 14px; line-height: 1.6; font-weight: 400; }
     
-    /* グループタイトル */
-    .group-title { text-align: left; font-size: 11px; font-weight: bold; color: #888; margin: 25px 0 10px 5px; letter-spacing: 1.5px; text-transform: uppercase; }
+    /* グループタイトル（余白とフォントサイズを緻密に調整） */
+    .group-title { text-align: left; font-size: 11px; font-weight: 700; color: #999; margin: 35px 0 12px 4px; letter-spacing: 2px; text-transform: uppercase; }
     
-    /* ボタンデザイン */
-    .button { display: flex; align-items: center; justify-content: center; background: white; color: black; text-decoration: none; padding: 18px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 14px; font-size: 17px; transition: 0.2s; box-sizing: border-box; width: 100%; }
-    .button:active { transform: scale(0.98); background: #f0f0f0; }
+    /* ボタンデザイン（AI感のあるグラデや派手な影を廃止、フラットかつ強固に） */
+    .button { display: flex; align-items: center; justify-content: center; background: white; color: #1a1a1a; text-decoration: none; padding: 16px; margin-bottom: 12px; border: 1px solid #e5e5e5; border-radius: 12px; font-size: 15px; font-weight: 600; transition: 0.2s; box-sizing: border-box; width: 100%; }
+    .button:active { transform: scale(0.98); background: #f5f5f5; border-color: #ddd; }
     
-    .btn-update { background: #e3f2fd; border-color: #bbdefb; color: #007bff; font-weight: bold; }
-    .btn-main { background: #007bff; color: white; border-color: #007bff; font-weight: bold; box-shadow: 0 4px 12px rgba(0,123,255,0.2); }
+    /* アプデ情報：ゲームらしさを出す控えめなブルー */
+    .btn-update { background: #f0f6ff; border-color: #d8e7fe; color: #0066cc; }
+    .btn-update:active { background: #e1edfe; }
     
-    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+    /* メインボタン：ソリッドな黒で引き締める */
+    .btn-main { background: #111; color: white; border-color: #111; }
+    .btn-main:active { background: #333; border-color: #333; }
+    
+    /* グリッド配置 */
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
     .btn-grid .button { font-size: 14px; padding: 16px 5px; margin-bottom: 0; }
     
-    footer { text-align: center; padding: 40px 0; color: #999; font-size: 12px; }
-    .responsive-banner { display: block; width: 100%; margin: 20px 0; overflow: hidden; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-    .banner-img { width: 100%; height: auto; display: block; }
+    footer { text-align: center; padding: 60px 0 40px 0; color: #aaa; font-size: 11px; letter-spacing: 0.5px; }
   </style>
 </head>
 <body>
@@ -88,21 +93,21 @@
   <div class="container">
     <p class="sub-text">マイクラ統合版 参加型サーバー<br>ドル鯖公式ホームページへようこそ</p>
 
-    <div class="group-title">ニュース</div>
+    <div class="group-title">NEWS</div>
     <a href="updates.html" class="button btn-update">アプデ情報を確認する</a>
 
-    <div class="group-title">参加</div>
+    <div class="group-title">JOIN</div>
     <a href="Num.html" class="button btn-main">認証コード発行</a>
     <a href="access.html" class="button">サーバーの入り方・情報</a>
 
-    <div class="group-title">インフォメーション</div>
+    <div class="group-title">INFORMATION</div>
     <div class="btn-grid">
       <a href="rules.html" class="button">ルール</a>
       <a href="Q.html" class="button">よくある質問</a>
     </div>
     <a href="GofList.html" class="button">公開ワールド一覧・攻略</a>
 
-    <div class="group-title">コミュニティ</div>
+    <div class="group-title">COMMUNITY</div>
     <div class="btn-grid">
       <a href="members.html" class="button">メンバー紹介</a>
       <a href="addons.html" class="button">アドオン紹介</a>
