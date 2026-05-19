@@ -1,58 +1,157 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>認証コード発行 - DORUDO SERVER</title>
-    <style>
-        body { margin: 0; font-family: sans-serif; background: #f0f7ff; padding-top: 80px; text-align: center; }
-        .card { background: white; padding: 30px; border-radius: 24px; display: inline-block; width: 90%; max-width: 350px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .code-display { font-size: 24px; font-weight: bold; color: #0052cc; letter-spacing: 1px; margin: 20px 0; padding: 15px; background: #e6f0fa; border-radius: 12px; border: 2px dashed #0052cc; }
-        .btn { background: #0052cc; color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>認証コード発行 - DORUDO SERVER</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #f5f7fa; padding-top: 80px; color: #1a1a1a; touch-action: manipulation; }
+    
+    /* ヘッダー・共通UI */
+    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: 16px; text-decoration: none; color: #fff; white-space: nowrap; letter-spacing: 1px; }
+    
+    /* サイドメニュー */
+    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+    .side-menu.open { left: 0; }
+    .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; }
+    .side-menu a:hover { color: #fff; background: #222; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+    .overlay.show { display: block; }
+
+    /* コンテンツコンテナ */
+    .container { width: 92%; max-width: 500px; margin: 40px auto; text-align: center; box-sizing: border-box; }
+    h1 { font-size: 22px; font-weight: 700; margin-bottom: 10px; color: #111; }
+    .sub-text { color: #555; margin-bottom: 30px; font-size: 14px; line-height: 1.6; }
+
+    /* メインカード */
+    .card { background: white; padding: 30px; border-radius: 24px; border: 1px solid rgba(0, 0, 0, 0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.03); box-sizing: border-box; width: 100%; }
+    
+    /* 🔴 コピー機能を内包したコード表示エリア */
+    .code-container { position: relative; margin: 25px 0; }
+    .code-display { font-size: 26px; font-weight: bold; color: #0052cc; letter-spacing: 2px; padding: 18px 60px 18px 18px; background: #e6f0fa; border-radius: 14px; border: 2px dashed #0052cc; text-align: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.2s; }
+    .code-display:active { background: #dbeafc; }
+    
+    /* コピーアイコンボタン */
+    .copy-icon-btn { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #0052cc; cursor: pointer; pointer-events: none; transition: 0.2s; }
+    
+    /* 🔴 トースト通知（画面下部にふわっと出る「コピーしました」） */
+    .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(17, 17, 17, 0.9); color: white; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 3000; transition: bottom 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); pointer-events: none; }
+    .toast.show { bottom: 40px; }
+    
+    /* 浮かび上がるディープブルーボタン */
+    .btn-main { 
+        display: flex; align-items: center; justify-content: center; 
+        background: #0052cc; color: white; border: 1px solid #0047b3; 
+        padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; 
+        box-shadow: 0 2px 4px rgba(0, 82, 204, 0.1);
+        transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), background 0.2s; 
+        cursor: pointer; width: 100%; box-sizing: border-box;
+    }
+    @media (hover: hover) {
+        .btn-main:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0, 82, 204, 0.25); background: #0066ff; border-color: #0066ff; }
+    }
+    .btn-main:active { transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0, 82, 204, 0.1); background: #0047b3; }
+
+    .back-link { display: block; text-align: center; margin: 40px 0; color: #888; text-decoration: none; font-size: 14px; font-weight: 500; }
+    footer { text-align: center; padding: 40px 0; color: #aaa; font-size: 11px; }
+  </style>
 </head>
 <body>
+
+  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+  <div id="sideMenu" class="side-menu">
+    <a href="index.html">トップ</a>
+    <a href="updates.html">アプデ情報</a>
+    <a href="Num.html">認証コード発行</a>
+    <a href="access.html">鯖の入り方・情報</a>
+    <a href="rules.html">ルール</a>
+    <a href="Q.html">よくある質問</a>
+    <a href="GofList.html">ワールド一覧</a>
+    <a href="members.html">メンバー紹介</a>
+    <a href="Admin.html">管理者パネル</a>
+  </div>
+
+  <div class="header-bar">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <a href="index.html" class="header-title">DORUDO SERVER</a>
+    <div style="width: 40px;"></div>
+  </div>
+
+  <div class="container">
+    <h1>認証コード発行</h1>
+    <p class="sub-text">この認証コードは決して他人に教えず、運営に直接　DM　で伝えてください。</p>
+
     <div class="card">
-        <h2>認証コード発行</h2>
-        <p style="color:#666; font-size:14px; line-height:1.5;">認証コードを発行します。<br>この画面のソースコードを解析しても偽造は不可能です。</p>
-        <div id="codeArea" class="code-display">-----</div>
-        <button class="btn" onclick="generateRSACode()">コードを発行する</button>
+        <div class="code-container" onclick="copyToClipboard()">
+            <div id="codeArea" class="code-display">-----</div>
+            <i class="fa-regular fa-copy copy-icon-btn" id="copyIcon"></i>
+        </div>
+        <button class="btn-main" onclick="generateRSACode()">コードを発行する</button>
     </div>
 
-    <script>
-        // RSA公開鍵パラメータ（天才に見られても全く問題のない数字）
-        const E = 7n;
-        const N = 3233n; // 61 * 53 から生成された法
+    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
+  </div>
 
-        function generateRSACode() {
-            // 1. 基盤となるランダムな秘密の値を生成 (100〜999)
-            const seed = Math.floor(100 + Math.random() * 900);
-            
-            // ドル鯖独自の「本物の証」として、末尾の数字を計算（例: 偶数奇数の特殊な並び）
-            // ここでは seed の百の位と十の位を足した数が一の位になるような特殊な「本物スタンプ」を埋め込む
-            const baseNum = Math.floor(10 + Math.random() * 80); // 2桁
-            const checkDigit = (Math.floor(baseNum / 10) + (baseNum % 10)) % 10;
-            const M = BigInt(baseNum * 10 + checkDigit); // 3桁の「スタンプ付き本物データ」
+  <div id="copyToast" class="toast"><i class="fa-solid fa-circle-check" style="color: #4caf50; margin-right: 8px;"></i> コードをコピーしました</div>
 
-            // 2. RSA暗号化計算: C = M^e mod n
-            let C = 1n;
-            let base = M % N;
-            let exp = E;
-            while (exp > 0n) {
-                if (exp % 2n === 1n) C = (C * base) % N;
-                base = (base * base) % N;
-                exp = exp / 2n;
-            }
+  <script>
+    function toggleMenu() {
+      document.getElementById('sideMenu').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('show');
+    }
 
-            // 3. 視認性と入力しやすさを両立した16進数4桁コードを生成
-            const hexCipher = C.toString(16).toUpperCase().padStart(4, '0');
-            
-            // 4. 偽装用トラップとしてダミーの値を結合し「12345-ABCD」の形にする
-            const dummy = Math.floor(10000 + Math.random() * 90000).toString();
-            const finalCode = dummy + "-" + hexCipher;
-            
-            document.getElementById('codeArea').innerText = finalCode;
+    const E = 7n;
+    const N = 3233n;
+    let isGenerated = false; // コードが生成されたかどうかのフラグ
+
+    function generateRSACode() {
+        const baseNum = Math.floor(10 + Math.random() * 80); 
+        const checkDigit = (Math.floor(baseNum / 10) + (baseNum % 10)) % 10;
+        const M = BigInt(baseNum * 10 + checkDigit); 
+
+        let C = 1n;
+        let base = M % N;
+        let exp = E;
+        while (exp > 0n) {
+            if (exp % 2n === 1n) C = (C * base) % N;
+            base = (base * base) % N;
+            exp = exp / 2n;
         }
-    </script>
+
+        const hexCipher = C.toString(16).toUpperCase().padStart(4, '0');
+        const dummy = Math.floor(10000 + Math.random() * 90000).toString();
+        const finalCode = dummy + "-" + hexCipher;
+        
+        document.getElementById('codeArea').innerText = finalCode;
+        isGenerated = true;
+    }
+
+    // 🔴 驚くほど滑らかに動く一発コピー＆トースト通知ロジック
+    function copyToClipboard() {
+        if (!isGenerated) return; // コードがまだ発行されていない場合は処理しない
+
+        const codeText = document.getElementById('codeArea').innerText;
+        
+        // 現代のセキュアブラウザ標準のコピーAPIを実行
+        navigator.clipboard.writeText(codeText).then(() => {
+            const toast = document.getElementById('copyToast');
+            
+            // 連続タップされても正常に表示をループさせる処理
+            toast.classList.remove('show');
+            void toast.offsetWidth; // 意図的にリフローを起こしてアニメーションをリセット
+            toast.classList.add('show');
+            
+            // 2.5秒後に自動で隠す
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }).catch(err => {
+            console.error('コピーに失敗しました: ', err);
+        });
+    }
+  </script>
 </body>
 </html>
