@@ -6,24 +6,38 @@
   <title>認証コード発行 - DORUDO SERVER</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body { margin: 0; font-family: sans-serif; background: #f5f7fa; padding-top: 80px; text-align: center; }
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+    body { margin: 0; font-family: sans-serif; background: #f0f4f8; padding-top: 80px; text-align: center; color: #333; }
+    /* 🔵 マッキンゼーブルーを基調としたヘッダー */
+    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #002D72; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; box-shadow: 0 2px 10px rgba(0,45,114,0.2); }
     .menu-btn { font-size: 24px; cursor: pointer; }
-    .header-title { font-weight: 700; font-size: 16px; color: #fff; text-decoration: none; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+    .header-title { font-weight: 700; font-size: 16px; color: #fff; text-decoration: none; letter-spacing: 1px; }
+    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #001F52; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
     .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; text-align: left; border-bottom: 1px solid #222; }
+    .side-menu a { display: block; padding: 15px 25px; color: #cbd5e1; text-decoration: none; text-align: left; border-bottom: 1px solid #002D72; }
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
     .overlay.show { display: block; }
+    
     .container { width: 92%; max-width: 500px; margin: 40px auto; }
-    .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); box-sizing: border-box; }
-    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0; background: #f9f9f9; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; font-weight: 600; }
-    .input-style:focus { background: #fff; border-color: #0052cc; outline: none; }
+    h2 { color: #002D72; font-weight: 700; margin-bottom: 25px; }
+    
+    /* 🔵 カード＆入力フォーム */
+    .card { background: white; padding: 35px 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,45,114,0.06); box-sizing: border-box; border: 1px solid #e2e8f0; }
+    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #cbd5e1; background: #f8fafc; margin-bottom: 25px; box-sizing: border-box; font-size: 16px; text-align: center; font-weight: 600; transition: 0.2s; }
+    .input-style:focus { background: #fff; border-color: #002D72; outline: none; }
+    
+    /* 🔵 鮮やかなライトブルーのコードエリア */
     .code-container { position: relative; margin: 25px 0; }
-    .code-display { font-size: 28px; font-weight: bold; color: #0052cc; padding: 18px; background: #e6f0fa; border-radius: 14px; border: 2px dashed #0052cc; cursor: pointer; letter-spacing: 2px; }
-    .copy-icon-btn { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #0052cc; pointer-events: none; }
-    .btn-main { display: flex; align-items: center; justify-content: center; background: #0052cc; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; }
-    .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(17, 17, 17, 0.9); color: white; padding: 12px 24px; border-radius: 30px; font-size: 14px; z-index: 3000; transition: bottom 0.3s; }
+    .code-display { font-size: 32px; font-weight: bold; color: #002D72; padding: 20px; background: #e0f2fe; border-radius: 14px; border: 2px dashed #0052cc; cursor: pointer; letter-spacing: 3px; }
+    .copy-icon-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 22px; color: #0052cc; pointer-events: none; }
+    
+    /* 🔵 ボタン */
+    .btn-main { display: flex; align-items: center; justify-content: center; background: #002D72; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; }
+    .btn-main:hover { background: #0040a3; }
+    
+    /* 🔴 ご要望の赤文字注意書き */
+    .disclaimer-red { color: #D92B2B; font-weight: 700; font-size: 14px; margin-top: 30px; line-height: 1.6; text-align: center; background: #fff1f1; padding: 15px; border-radius: 12px; border: 1px solid #fecaca; }
+    
+    .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(0, 45, 114, 0.95); color: white; padding: 14px 28px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 3000; transition: bottom 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
     .toast.show { bottom: 40px; }
   </style>
 </head>
@@ -45,17 +59,22 @@
   <div class="container">
     <h2>認証コード発行</h2>
     <div class="card">
-        <input type="text" id="userNameInput" class="input-style" placeholder="名前を入力してください（ゲーマータグ,IDでも可）" maxlength="15">
+        <input type="text" id="userNameInput" class="input-style" placeholder="お名前を入力してください" maxlength="15">
         
         <div class="code-container" onclick="copyToClipboard()">
             <div id="codeArea" class="code-display">-----</div>
             <i class="fa-regular fa-copy copy-icon-btn"></i>
         </div>
         <button class="btn-main" onclick="generateMatrix6Code()">コードを発行する</button>
+        
+        <div class="disclaimer-red">
+          <i class="fa-solid fa-circle-exclamation"></i> このコードは決して他人に教えないでください。<br>
+          また、このコードは鯖主へ直接 <strong>DM</strong> で伝えてください。
+        </div>
     </div>
   </div>
 
-  <div id="copyToast" class="toast">コピーしました</div>
+  <div id="copyToast" class="toast">クリップボードにコピーしました</div>
 
   <script>
     function toggleMenu() {
@@ -66,7 +85,6 @@
     let isGenerated = false;
 
     function generateMatrix6Code() {
-        // 前半3桁を完全ランダム生成
         const head = Math.floor(100 + Math.random() * 900);
         const hStr = head.toString();
 
@@ -74,15 +92,11 @@
         const n2 = parseInt(hStr[1]);
         const n3 = parseInt(hStr[2]);
 
-        // 6桁用のシンプルマトリクス計算
         const c1 = (n1 + n2) % 10;
         const c2 = (n2 + n3) % 10;
         const c3 = (c1 + c2 + n3) % 10;
 
-        const tailStr = `${c1}${c2}${c3}`;
-        
-        // 画面には純粋な6桁の数字（3桁-3桁）だけを表示
-        document.getElementById('codeArea').innerText = hStr + "-" + tailStr;
+        document.getElementById('codeArea').innerText = hStr + "-" + c1 + c2 + c3;
         isGenerated = true;
     }
 
