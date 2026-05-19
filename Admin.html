@@ -1,116 +1,165 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>管理者照合パネル - DORUDO SERVER</title>
-    <style>
-        body { margin: 0; font-family: sans-serif; background: #fff5f5; padding-top: 80px; color: #333; text-align: center; }
-        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: inline-block; width: 90%; max-width: 400px; box-sizing: border-box; }
-        .input-style { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; margin-bottom: 20px; box-sizing: border-box; font-size: 18px; text-align: center; outline: none; }
-        .btn-red { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #d32f2f; color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
-        #adminContent { display: none; }
-        .result-box { margin-top: 20px; font-size: 20px; font-weight: bold; padding: 20px; border-radius: 12px; }
-        .status-waiting { color: #888; background: #f5f5f5; }
-        .status-success { color: #2e7d32; background: #e8f5e9; border: 2px solid #2e7d32; }
-        .status-error { color: #d32f2f; background: #ffebee; border: 2px solid #d32f2f; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>管理者パネル - DORUDO SERVER</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    body { margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #fafafa; padding-top: 80px; color: #1a1a1a; touch-action: manipulation; }
+    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: 16px; text-decoration: none; color: #fff; white-space: nowrap; letter-spacing: 1px; }
+    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+    .side-menu.open { left: 0; }
+    .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; }
+    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+    .overlay.show { display: block; }
+    .container { width: 92%; max-width: 460px; margin: 40px auto; text-align: center; box-sizing: border-box; }
+    .card { background: white; padding: 35px 30px; border-radius: 24px; border: 1px solid #e5e5e5; box-shadow: 0 4px 20px rgba(0,0,0,0.02); box-sizing: border-box; width: 100%; }
+    .card h2 { font-size: 20px; font-weight: 700; margin: 0 0 25px 0; letter-spacing: 1px; }
+    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0; background: #f9f9f9; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; outline: none; font-weight: 600; }
+    .input-style:focus { background: #fff; border-color: #111; }
+    .btn-admin { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #111; background: #111; color: white; font-weight: 600; font-size: 15px; cursor: pointer; box-sizing: border-box; transition: 0.2s; }
+    #loginSection { display: block; }
+    #adminContent { display: none; }
+    
+    /* 検証ボックス */
+    .result-box { margin-top: 25px; font-size: 16px; font-weight: 700; padding: 18px; border-radius: 12px; letter-spacing: 0.5px; line-height: 1.5; }
+    .status-waiting { color: #666; background: #f5f5f5; border: 1px solid #e0e0e0; }
+    .status-success { color: #0052cc; background: #e6f0fa; border: 1px solid #c8def5; }
+    .status-error { color: #d32f2f; background: #ffebee; border: 1px solid #ffcdd2; }
+    .back-link { display: block; text-align: center; margin: 40px 0; color: #888; text-decoration: none; font-size: 14px; }
+    footer { text-align: center; padding: 40px 0; color: #aaa; font-size: 11px; }
+  </style>
 </head>
 <body>
+
+  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+  <div id="sideMenu" class="side-menu">
+    <a href="index.html">トップ</a>
+    <a href="updates.html">アプデ情報</a>
+    <a href="Num.html">認証コード発行</a>
+    <a href="access.html">鯖の入り方・情報</a>
+    <a href="rules.html">ルール</a>
+    <a href="Q.html">よくある質問</a>
+    <a href="GofList.html">ワールド一覧</a>
+    <a href="members.html">メンバー紹介</a>
+    <a href="Admin.html">管理者パネル</a>
+  </div>
+
+  <div class="header-bar">
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <a href="index.html" class="header-title">DORUDO SERVER</a>
+    <div style="width: 40px;"></div>
+  </div>
+
+  <div class="container">
     <div id="loginSection" class="card">
         <h2>ADMIN LOGIN</h2>
-        <input type="password" id="adminPass" class="input-style" placeholder="Password">
-        <button class="btn-red" onclick="checkLogin()">ログイン</button>
+        <input type="password" id="adminPass" class="input-style" placeholder="パスワードを入力">
+        <button class="btn-admin" onclick="checkLogin()">ログイン</button>
     </div>
 
     <div id="adminContent" class="card">
-        <label style="display:block; margin-bottom:15px; font-weight:bold; color:#666;">認証コード確認</label>
-        <input type="text" id="checkInput" class="input-style" placeholder="00000-XXXX" maxlength="10" oninput="runRSADecryptCheck()">
-        <div id="resultDisplay" class="status-waiting">入力待ち...</div>
+        <h2>RSA CODE VALIDATOR</h2>
+        <p style="color:#666; font-size:13px; margin:-15px 0 20px 0; line-height:1.4;">提出されたコード（例: TANAKA-A3BF）をそのまま貼り付けて検証してください。</p>
+        <input type="text" id="checkInput" class="input-style" placeholder="提出されたコードをペースト" oninput="runRSANameCheck()">
+        <div id="resultDisplay" class="result-box status-waiting">コードの入力待ち...</div>
     </div>
+    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
+  </div>
 
-    <script>
-        const ADMIN_PASSWORD = "dorugy";
-        
-        // 🔴 管理者しか知らない秘密鍵パラメータ (d, n)
-        // これが Num.html 側に書いていないため、天才がどれだけ Num.html を見ても太刀打ちできません
-        const D = 2753n;
-        const N = 3233n;
+  <footer><p>©2026 DORUDO SERVER Official Website</p></footer>
 
-        function checkLogin() {
-            if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
-                sessionStorage.setItem('isDoruAdmin', 'true');
-                showAdmin();
-            } else { alert("パスワードが違います"); }
+  <script>
+    function toggleMenu() {
+      document.getElementById('sideMenu').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('show');
+    }
+
+    const ADMIN_PASSWORD = "dorugy";
+    const D = 2753n;
+    const N = 3233n;
+
+    function checkLogin() {
+        if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+            sessionStorage.setItem('isDoruAdmin', 'true');
+            showAdmin();
+        } else { alert("パスワードが違います"); }
+    }
+    window.onload = function() {
+        if (sessionStorage.getItem('isDoruAdmin') === 'true') showAdmin();
+    };
+    function showAdmin() {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminContent').style.display = 'block';
+    }
+    
+    function runRSANameCheck() {
+        const inputElement = document.getElementById('checkInput');
+        let val = inputElement.value.trim();
+        const result = document.getElementById('resultDisplay');
+
+        if (val.length === 0) {
+            result.innerText = "コードの入力待ち...";
+            result.className = "result-box status-waiting";
+            return;
         }
-        window.onload = function() {
-            if (sessionStorage.getItem('isDoruAdmin') === 'true') showAdmin();
-        };
-        function showAdmin() {
-            document.getElementById('loginSection').style.display = 'none';
-            document.getElementById('adminContent').style.display = 'block';
-        }
-        
-        function runRSADecryptCheck() {
-            const inputElement = document.getElementById('checkInput');
-            let val = inputElement.value.trim().toUpperCase();
 
-            if (!val.includes("-") && val.length >= 6) {
-                val = val.slice(0, 5) + "-" + val.slice(5);
-                inputElement.value = val;
+        // 最後のハイフンの位置で名前部分と暗号部分（後ろ4桁）に分離
+        const lastHyphenIndex = val.lastIndexOf("-");
+        if (lastHyphenIndex === -1 || lastHyphenIndex === val.length - 1) {
+            result.innerText = "認証不可\n（形式が不正です）";
+            result.className = "result-box status-error";
+            return;
+        }
+
+        const namePart = val.slice(0, lastHyphenIndex);
+        const cipherHex = val.slice(lastHyphenIndex + 1).toUpperCase();
+
+        // 16進数チェックの簡易バリデーション
+        if (!/^[0-9A-F]{4}$/.test(cipherHex)) {
+            result.innerText = "認証不可\n（暗号の桁数または文字が不正です）";
+            result.className = "result-box status-error";
+            return;
+        }
+
+        try {
+            const C = BigInt("0x" + cipherHex);
+
+            // RSA復号計算 (M = C^D mod N)
+            let M = 1n;
+            let base = C % N;
+            let exp = D;
+            while (exp > 0n) {
+                if (exp % 2n === 1n) M = (M * base) % N;
+                base = (base * base) % N;
+                exp = exp / 2n;
             }
 
-            const result = document.getElementById('resultDisplay');
+            const decryptedNum = Number(M);
 
-            if (val.length === 0) {
-                result.innerText = "入力待ち...";
-                result.className = "result-box status-waiting";
-                return;
+            // 提出された「名前」から、本来あるべきハッシュメッセージの数値を計算
+            let expectedNameHash = 0;
+            for (let i = 0; i < namePart.length; i++) {
+                expectedNameHash += namePart.charCodeAt(i);
             }
+            const expectedM = 500 + (expectedNameHash % 100);
 
-            const regex = /^([0-9]{5})-([0-9A-F]{4})$/;
-            const match = val.match(regex);
-
-            if (match) {
-                const dummyHalf = match[1]; // 前半5桁はただの目くらまし（ハッカーホイホイ）
-                const cipherHex = match[2]; // 本物の暗号データ
-                
-                // 16進数からBigInt（暗号数値）に戻す
-                const C = BigInt("0x" + cipherHex);
-
-                // 1. RSA復号計算: M = C^d mod n
-                let M = 1n;
-                let base = C % N;
-                let exp = D;
-                while (exp > 0n) {
-                    if (exp % 2n === 1n) M = (M * base) % N;
-                    base = (base * base) % N;
-                    exp = exp / 2n;
-                }
-
-                // 復号された3桁の数値を取得
-                const decryptedNum = Number(M);
-                
-                // 2. 復号した数値が「ドル鯖スタンプの数式」を満たしているかその場で最終チェック
-                if (decryptedNum >= 100 && decryptedNum <= 999) {
-                    const baseNum = Math.floor(decryptedNum / 10);
-                    const checkDigit = decryptedNum % 10;
-                    const expectedCheck = (Math.floor(baseNum / 10) + (baseNum % 10)) % 10;
-
-                    if (checkDigit === expectedCheck) {
-                        result.innerText = "認証可（RSA復号・数式一致）";
-                        result.className = "result-box status-success";
-                        return;
-                    }
-                }
-                
-                result.innerText = "認証不可（暗号不正・偽造検出）";
-                result.className = "result-box status-error";
+            // 🔵 復号した数値と、入力された名前から割り出した数値が100%一致するか検証
+            if (decryptedNum === expectedM) {
+                result.innerText = `認証可（本物）\n発行者: ${namePart}`;
+                result.className = "result-box status-success";
             } else {
-                result.innerText = "認証不可（解析中...）";
+                result.innerText = "認証不可\n（名前または暗号が書き換えられています）";
                 result.className = "result-box status-error";
             }
+        } catch (e) {
+            result.innerText = "認証不可\n（解析エラー）";
+            result.className = "result-box status-error";
         }
-    </script>
+    }
+  </script>
 </body>
 </html>
