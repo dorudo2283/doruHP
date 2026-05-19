@@ -4,43 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>管理者照合パネル - DORUDO SERVER</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #fff5f5; padding-top: 80px; color: #333; }
-        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #d32f2f; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .header-title { font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-        .container { width: 92%; max-width: 400px; margin: 0 auto; text-align: center; }
-        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid #ffcdd2; }
+        body { margin: 0; font-family: sans-serif; background: #fff5f5; padding-top: 80px; color: #333; text-align: center; }
+        .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); display: inline-block; width: 90%; max-width: 400px; box-sizing: border-box; }
         .input-style { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; margin-bottom: 20px; box-sizing: border-box; font-size: 18px; text-align: center; outline: none; }
         .btn-red { width: 100%; padding: 15px; border-radius: 12px; border: none; background: #d32f2f; color: white; font-weight: bold; cursor: pointer; font-size: 16px; }
         #adminContent { display: none; }
-        #resultDisplay { margin-top: 20px; font-size: 20px; font-weight: bold; padding: 20px; border-radius: 12px; transition: 0.3s; }
+        .result-box { margin-top: 20px; font-size: 20px; font-weight: bold; padding: 20px; border-radius: 12px; }
         .status-waiting { color: #888; background: #f5f5f5; }
         .status-success { color: #2e7d32; background: #e8f5e9; border: 2px solid #2e7d32; }
         .status-error { color: #d32f2f; background: #ffebee; border: 2px solid #d32f2f; }
-        .logout-btn { display: inline-block; margin-top: 25px; color: #d32f2f; background: none; border: 1px solid #d32f2f; padding: 8px 20px; border-radius: 20px; font-size: 13px; cursor: pointer; }
-        .back-link { display: block; text-align: center; margin-top: 30px; color: #888; text-decoration: none; font-size: 14px; }
     </style>
 </head>
 <body>
-    <div class="header-bar"><a href="index.html" class="header-title">管理者ログイン</a></div>
-    <div class="container">
-        <div id="loginSection" class="card">
-            <h2 style="margin-top:0;">管理者パスワードを入力</h2>
-            <input type="password" id="adminPass" class="input-style" placeholder="Password">
-            <button class="btn-red" onclick="checkLogin()">ログイン</button>
-        </div>
-        <div id="adminContent" class="card">
-            <label style="display:block; margin-bottom:15px; font-weight:bold; color:#666;">認証するコードを入力</label>
-            <input type="text" id="checkInput" class="input-style" placeholder="00000-XXXXXX" maxlength="12" oninput="runCheck()">
-            <div id="resultDisplay" class="status-waiting">入力待ち...</div>
-            <button class="logout-btn" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> ログアウト</button>
-        </div>
-        <a href="index.html" class="back-link">トップページに戻る</a>
+    <div id="loginSection" class="card">
+        <h2>ADMIN LOGIN</h2>
+        <input type="password" id="adminPass" class="input-style" placeholder="Password">
+        <button class="btn-red" onclick="checkLogin()">ログイン</button>
+    </div>
+
+    <div id="adminContent" class="card">
+        <label style="display:block; margin-bottom:15px; font-weight:bold; color:#666;">認証コード確認</label>
+        <input type="text" id="checkInput" class="input-style" placeholder="00000-XXXX" maxlength="10" oninput="runRSADecryptCheck()">
+        <div id="resultDisplay" class="status-waiting">入力待ち...</div>
     </div>
 
     <script>
         const ADMIN_PASSWORD = "dorugy";
+        
+        // 🔴 管理者しか知らない秘密鍵パラメータ (d, n)
+        // これが Num.html 側に書いていないため、天才がどれだけ Num.html を見ても太刀打ちできません
+        const D = 2753n;
+        const N = 3233n;
+
         function checkLogin() {
             if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
                 sessionStorage.setItem('isDoruAdmin', 'true');
@@ -54,34 +50,65 @@
             document.getElementById('loginSection').style.display = 'none';
             document.getElementById('adminContent').style.display = 'block';
         }
-        function logout() {
-            sessionStorage.removeItem('isDoruAdmin');
-            location.reload();
-        }
         
-        function runCheck() {
+        function runRSADecryptCheck() {
             const inputElement = document.getElementById('checkInput');
             let val = inputElement.value.trim().toUpperCase();
 
-            // 【自動ハイフン挿入ロジック】
-            // ハイフンがなく、数字が6桁以上入力されたら、5桁目の後ろにハイフンを自動挿入
             if (!val.includes("-") && val.length >= 6) {
                 val = val.slice(0, 5) + "-" + val.slice(5);
-                inputElement.value = val; // 画面の入力欄に反映
+                inputElement.value = val;
             }
 
             const result = document.getElementById('resultDisplay');
-            const correctCode = localStorage.getItem('doru_auth_code');
 
             if (val.length === 0) {
                 result.innerText = "入力待ち...";
-                result.className = "status-waiting";
-            } else if (val === correctCode) {
-                result.innerText = "認証可";
-                result.className = "status-success";
+                result.className = "result-box status-waiting";
+                return;
+            }
+
+            const regex = /^([0-9]{5})-([0-9A-F]{4})$/;
+            const match = val.match(regex);
+
+            if (match) {
+                const dummyHalf = match[1]; // 前半5桁はただの目くらまし（ハッカーホイホイ）
+                const cipherHex = match[2]; // 本物の暗号データ
+                
+                // 16進数からBigInt（暗号数値）に戻す
+                const C = BigInt("0x" + cipherHex);
+
+                // 1. RSA復号計算: M = C^d mod n
+                let M = 1n;
+                let base = C % N;
+                let exp = D;
+                while (exp > 0n) {
+                    if (exp % 2n === 1n) M = (M * base) % N;
+                    base = (base * base) % N;
+                    exp = exp / 2n;
+                }
+
+                // 復号された3桁の数値を取得
+                const decryptedNum = Number(M);
+                
+                // 2. 復号した数値が「ドル鯖スタンプの数式」を満たしているかその場で最終チェック
+                if (decryptedNum >= 100 && decryptedNum <= 999) {
+                    const baseNum = Math.floor(decryptedNum / 10);
+                    const checkDigit = decryptedNum % 10;
+                    const expectedCheck = (Math.floor(baseNum / 10) + (baseNum % 10)) % 10;
+
+                    if (checkDigit === expectedCheck) {
+                        result.innerText = "認証可（RSA復号・数式一致）";
+                        result.className = "result-box status-success";
+                        return;
+                    }
+                }
+                
+                result.innerText = "認証不可（暗号不正・偽造検出）";
+                result.className = "result-box status-error";
             } else {
-                result.innerText = "認証不可";
-                result.className = "status-error";
+                result.innerText = "認証不可（解析中...）";
+                result.className = "result-box status-error";
             }
         }
     </script>
