@@ -6,40 +6,25 @@
   <title>認証コード発行 - DORUDO SERVER</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body { margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #f5f7fa; padding-top: 80px; color: #1a1a1a; touch-action: manipulation; }
+    body { margin: 0; font-family: sans-serif; background: #f5f7fa; padding-top: 80px; text-align: center; }
     .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: 16px; text-decoration: none; color: #fff; white-space: nowrap; letter-spacing: 1px; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+    .menu-btn { font-size: 24px; cursor: pointer; }
+    .header-title { font-weight: 700; font-size: 16px; color: #fff; text-decoration: none; }
+    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
     .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; }
+    .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; text-align: left; border-bottom: 1px solid #222; }
     .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
     .overlay.show { display: block; }
-    .container { width: 92%; max-width: 500px; margin: 40px auto; text-align: center; box-sizing: border-box; }
-    h1 { font-size: 22px; font-weight: 700; margin-bottom: 10px; color: #111; }
-    .sub-text { color: #555; margin-bottom: 30px; font-size: 14px; line-height: 1.6; }
-    
-    /* カード・入力フォーム設定 */
-    .card { background: white; padding: 30px; border-radius: 24px; border: 1px solid rgba(0, 0, 0, 0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.03); box-sizing: border-box; width: 100%; }
-    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0; background: #f9f9f9; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; outline: none; font-weight: 600; }
-    .input-style:focus { background: #fff; border-color: #0052cc; }
-
+    .container { width: 92%; max-width: 500px; margin: 40px auto; }
+    .card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); box-sizing: border-box; }
+    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0; background: #f9f9f9; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; font-weight: 600; }
+    .input-style:focus { background: #fff; border-color: #0052cc; outline: none; }
     .code-container { position: relative; margin: 25px 0; }
-    .code-display { font-size: 22px; font-weight: bold; color: #0052cc; letter-spacing: 1px; padding: 18px 60px 18px 18px; background: #e6f0fa; border-radius: 14px; border: 2px dashed #0052cc; text-align: center; cursor: pointer; position: relative; overflow: hidden; transition: 0.2s; word-break: break-all; }
-    .code-display:active { background: #dbeafc; }
-    .copy-icon-btn { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #0052cc; cursor: pointer; pointer-events: none; }
-    
-    .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(17, 17, 17, 0.9); color: white; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 3000; transition: bottom 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 15px rgba(0,0,0,0.2); pointer-events: none; }
+    .code-display { font-size: 28px; font-weight: bold; color: #0052cc; padding: 18px; background: #e6f0fa; border-radius: 14px; border: 2px dashed #0052cc; cursor: pointer; letter-spacing: 2px; }
+    .copy-icon-btn { position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #0052cc; pointer-events: none; }
+    .btn-main { display: flex; align-items: center; justify-content: center; background: #0052cc; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; }
+    .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(17, 17, 17, 0.9); color: white; padding: 12px 24px; border-radius: 30px; font-size: 14px; z-index: 3000; transition: bottom 0.3s; }
     .toast.show { bottom: 40px; }
-    
-    /* 浮かび上がるボタン */
-    .btn-main { display: flex; align-items: center; justify-content: center; background: #0052cc; color: white; border: 1px solid #0047b3; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; box-shadow: 0 2px 4px rgba(0, 82, 204, 0.1); transition: transform 0.25s, box-shadow 0.25s, background 0.2s; cursor: pointer; width: 100%; box-sizing: border-box; }
-    @media (hover: hover) {
-        .btn-main:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0, 82, 204, 0.25); background: #0066ff; }
-    }
-    .btn-main:active { transform: translateY(1px); background: #0047b3; }
-    .back-link { display: block; text-align: center; margin: 40px 0; color: #888; text-decoration: none; font-size: 14px; font-weight: 500; }
-    footer { text-align: center; padding: 40px 0; color: #aaa; font-size: 11px; }
   </style>
 </head>
 <body>
@@ -47,13 +32,7 @@
   <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
   <div id="sideMenu" class="side-menu">
     <a href="index.html">トップ</a>
-    <a href="updates.html">アプデ情報</a>
     <a href="Num.html">認証コード発行</a>
-    <a href="access.html">鯖の入り方・情報</a>
-    <a href="rules.html">ルール</a>
-    <a href="Q.html">よくある質問</a>
-    <a href="GofList.html">ワールド一覧</a>
-    <a href="members.html">メンバー紹介</a>
     <a href="Admin.html">管理者パネル</a>
   </div>
 
@@ -64,24 +43,19 @@
   </div>
 
   <div class="container">
-    <h1>認証コード発行</h1>
-    <p class="sub-text">名前を入力してボタンを押してください。また、このコードは決して他人に教えず、鯖主に直接　DM　で伝えてください。</p>
-
+    <h2>認証コード発行</h2>
     <div class="card">
-        <input type="text" id="userNameInput" class="input-style" placeholder="あなたの名前を入力（例: TANAKA）" maxlength="12">
+        <input type="text" id="userNameInput" class="input-style" placeholder="名前を入力してください（ゲーマータグ,IDでも可）" maxlength="15">
         
         <div class="code-container" onclick="copyToClipboard()">
-            <div id="codeArea" class="code-display">名前を入力して発行してください</div>
+            <div id="codeArea" class="code-display">-----</div>
             <i class="fa-regular fa-copy copy-icon-btn"></i>
         </div>
-        <button class="btn-main" onclick="generateRSANameCode()">コードを発行する</button>
+        <button class="btn-main" onclick="generateMatrix6Code()">コードを発行する</button>
     </div>
-    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
   </div>
 
-  <div id="copyToast" class="toast"><i class="fa-solid fa-circle-check" style="color: #4caf50; margin-right: 8px;"></i> コードをコピーしました</div>
-
-  <footer><p>©2026 DORUDO SERVER Official Website</p></footer>
+  <div id="copyToast" class="toast">コピーしました</div>
 
   <script>
     function toggleMenu() {
@@ -89,53 +63,35 @@
       document.getElementById('overlay').classList.toggle('show');
     }
 
-    const E = 7n;
-    const N = 3233n;
     let isGenerated = false;
 
-    function generateRSANameCode() {
-        const nameInput = document.getElementById('userNameInput').value.trim();
-        if (!nameInput) {
-            alert("名前を入力してください。");
-            return;
-        }
+    function generateMatrix6Code() {
+        // 前半3桁を完全ランダム生成
+        const head = Math.floor(100 + Math.random() * 900);
+        const hStr = head.toString();
 
-        // 1. 名前の文字を簡易ハッシュ化して、100〜999の3桁(M)に圧縮
-        let nameHash = 0;
-        for (let i = 0; i < nameInput.length; i++) {
-            nameHash += nameInput.charCodeAt(i);
-        }
-        // 下2桁を取り出し、頭に「5」をつけて、100〜999の範囲に絶対に収まる3桁のメッセージ(M)を作成
-        const M = BigInt(500 + (nameHash % 100));
+        const n1 = parseInt(hStr[0]);
+        const n2 = parseInt(hStr[1]);
+        const n3 = parseInt(hStr[2]);
 
-        // 2. RSA暗号化計算 (C = M^E mod N)
-        let C = 1n;
-        let base = M % N;
-        let exp = E;
-        while (exp > 0n) {
-            if (exp % 2n === 1n) C = (C * base) % N;
-            base = (base * base) % N;
-            exp = exp / 2n;
-        }
+        // 6桁用のシンプルマトリクス計算
+        const c1 = (n1 + n2) % 10;
+        const c2 = (n2 + n3) % 10;
+        const c3 = (c1 + c2 + n3) % 10;
 
-        // 3. 暗号を4桁固定の16進数に変換
-        const hexCipher = C.toString(16).toUpperCase().padStart(4, '0');
+        const tailStr = `${c1}${c2}${c3}`;
         
-        // 4. 管理者がコピペしやすいよう、[入力した名前]を可視化してハイフンで合体
-        // 例: TANAKA-A3BF
-        document.getElementById('codeArea').innerText = nameInput + "-" + hexCipher;
+        // 画面には純粋な6桁の数字（3桁-3桁）だけを表示
+        document.getElementById('codeArea').innerText = hStr + "-" + tailStr;
         isGenerated = true;
     }
 
     function copyToClipboard() {
         if (!isGenerated) return;
-        const codeText = document.getElementById('codeArea').innerText;
-        navigator.clipboard.writeText(codeText).then(() => {
+        navigator.clipboard.writeText(document.getElementById('codeArea').innerText).then(() => {
             const toast = document.getElementById('copyToast');
-            toast.classList.remove('show');
-            void toast.offsetWidth;
             toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 2500);
+            setTimeout(() => { toast.classList.remove('show'); }, 2000);
         });
     }
   </script>
