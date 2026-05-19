@@ -4,52 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>管理者パネル - DORUDO SERVER</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    body { margin: 0; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; background: #fafafa; padding-top: 80px; color: #1a1a1a; touch-action: manipulation; }
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 700; font-size: 16px; text-decoration: none; color: #fff; white-space: nowrap; letter-spacing: 1px; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-    .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
-    .overlay.show { display: block; }
-    .container { width: 92%; max-width: 460px; margin: 40px auto; text-align: center; box-sizing: border-box; }
-    .card { background: white; padding: 35px 30px; border-radius: 24px; border: 1px solid #e5e5e5; box-shadow: 0 4px 20px rgba(0,0,0,0.02); box-sizing: border-box; width: 100%; }
-    .card h2 { font-size: 20px; font-weight: 700; margin: 0 0 25px 0; letter-spacing: 1px; }
-    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0; background: #f9f9f9; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; outline: none; font-weight: 600; }
-    .input-style:focus { background: #fff; border-color: #111; }
-    .btn-admin { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #111; background: #111; color: white; font-weight: 600; font-size: 15px; cursor: pointer; box-sizing: border-box; transition: 0.2s; }
+    body { margin: 0; font-family: sans-serif; background: #fafafa; padding-top: 80px; text-align: center; }
+    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; }
+    .menu-btn { font-size: 24px; cursor: pointer; }
+    .header-title { font-weight: 700; font-size: 16px; color: #fff; text-decoration: none; }
+    .container { width: 92%; max-width: 460px; margin: 40px auto; }
+    .card { background: white; padding: 35px 30px; border-radius: 24px; border: 1px solid #e5e5e5; box-shadow: 0 4px 20px rgba(0,0,0,0.02); box-sizing: border-box; }
+    .card h2 { font-size: 20px; margin: 0 0 25px 0; letter-spacing: 1px; }
+    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid #e0e0e0; background: #f9f9f9; margin-bottom: 20px; box-sizing: border-box; font-size: 18px; text-align: center; font-weight: 600; letter-spacing: 1px; }
+    .input-style:focus { background: #fff; border-color: #111; outline: none; }
+    .btn-admin { width: 100%; padding: 16px; border-radius: 12px; border: none; background: #111; color: white; font-weight: 600; font-size: 15px; cursor: pointer; }
     #loginSection { display: block; }
     #adminContent { display: none; }
-    
-    /* 検証ボックス */
-    .result-box { margin-top: 25px; font-size: 16px; font-weight: 700; padding: 18px; border-radius: 12px; letter-spacing: 0.5px; line-height: 1.5; }
+    .result-box { margin-top: 25px; font-size: 18px; font-weight: 700; padding: 18px; border-radius: 12px; }
     .status-waiting { color: #666; background: #f5f5f5; border: 1px solid #e0e0e0; }
     .status-success { color: #0052cc; background: #e6f0fa; border: 1px solid #c8def5; }
     .status-error { color: #d32f2f; background: #ffebee; border: 1px solid #ffcdd2; }
-    .back-link { display: block; text-align: center; margin: 40px 0; color: #888; text-decoration: none; font-size: 14px; }
-    footer { text-align: center; padding: 40px 0; color: #aaa; font-size: 11px; }
   </style>
 </head>
 <body>
 
-  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-  <div id="sideMenu" class="side-menu">
-    <a href="index.html">トップ</a>
-    <a href="updates.html">アプデ情報</a>
-    <a href="Num.html">認証コード発行</a>
-    <a href="access.html">鯖の入り方・情報</a>
-    <a href="rules.html">ルール</a>
-    <a href="Q.html">よくある質問</a>
-    <a href="GofList.html">ワールド一覧</a>
-    <a href="members.html">メンバー紹介</a>
-    <a href="Admin.html">管理者パネル</a>
-  </div>
-
   <div class="header-bar">
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div class="menu-btn">☰</div>
     <a href="index.html" class="header-title">DORUDO SERVER</a>
     <div style="width: 40px;"></div>
   </div>
@@ -62,103 +39,62 @@
     </div>
 
     <div id="adminContent" class="card">
-        <h2>RSA CODE VALIDATOR</h2>
-        <p style="color:#666; font-size:13px; margin:-15px 0 20px 0; line-height:1.4;">提出されたコード（例: TANAKA-A3BF）をそのまま貼り付けて検証してください。</p>
-        <input type="text" id="checkInput" class="input-style" placeholder="提出されたコードをペースト" oninput="runRSANameCheck()">
+        <h2>CODE VALIDATOR</h2>
+        <input type="text" id="checkInput" class="input-style" placeholder="000-000" maxlength="7" oninput="validateMatrix6Code()">
         <div id="resultDisplay" class="result-box status-waiting">コードの入力待ち...</div>
     </div>
-    <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
   </div>
 
-  <footer><p>©2026 DORUDO SERVER Official Website</p></footer>
-
   <script>
-    function toggleMenu() {
-      document.getElementById('sideMenu').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('show');
-    }
-
     const ADMIN_PASSWORD = "dorugy";
-    const D = 2753n;
-    const N = 3233n;
 
     function checkLogin() {
         if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
-            sessionStorage.setItem('isDoruAdmin', 'true');
-            showAdmin();
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
         } else { alert("パスワードが違います"); }
     }
-    window.onload = function() {
-        if (sessionStorage.getItem('isDoruAdmin') === 'true') showAdmin();
-    };
-    function showAdmin() {
-        document.getElementById('loginSection').style.display = 'none';
-        document.getElementById('adminContent').style.display = 'block';
-    }
     
-    function runRSANameCheck() {
-        const inputElement = document.getElementById('checkInput');
-        let val = inputElement.value.trim();
+    function validateMatrix6Code() {
+        const input = document.getElementById('checkInput').value.trim();
         const result = document.getElementById('resultDisplay');
 
-        if (val.length === 0) {
+        if (input.length === 0) {
             result.innerText = "コードの入力待ち...";
             result.className = "result-box status-waiting";
             return;
         }
 
-        // 最後のハイフンの位置で名前部分と暗号部分（後ろ4桁）に分離
-        const lastHyphenIndex = val.lastIndexOf("-");
-        if (lastHyphenIndex === -1 || lastHyphenIndex === val.length - 1) {
-            result.innerText = "認証不可\n（形式が不正です）";
-            result.className = "result-box status-error";
-            return;
-        }
+        // 6桁形式チェック (3桁-3桁の数字)
+        const regex = /^([0-9]{3})-([0-9]{3})$/;
+        const match = input.match(regex);
 
-        const namePart = val.slice(0, lastHyphenIndex);
-        const cipherHex = val.slice(lastHyphenIndex + 1).toUpperCase();
+        if (match) {
+            const head = match[1];
+            const tail = match[2];
 
-        // 16進数チェックの簡易バリデーション
-        if (!/^[0-9A-F]{4}$/.test(cipherHex)) {
-            result.innerText = "認証不可\n（暗号の桁数または文字が不正です）";
-            result.className = "result-box status-error";
-            return;
-        }
+            const n1 = parseInt(head[0]);
+            const n2 = parseInt(head[1]);
+            const n3 = parseInt(head[2]);
 
-        try {
-            const C = BigInt("0x" + cipherHex);
+            const t1 = parseInt(tail[0]);
+            const t2 = parseInt(tail[1]);
+            const t3 = parseInt(tail[2]);
 
-            // RSA復号計算 (M = C^D mod N)
-            let M = 1n;
-            let base = C % N;
-            let exp = D;
-            while (exp > 0n) {
-                if (exp % 2n === 1n) M = (M * base) % N;
-                base = (base * base) % N;
-                exp = exp / 2n;
-            }
+            // 6桁マトリクス格子暗号の逆算検証
+            const check1 = (n1 + n2) % 10 === t1;
+            const check2 = (n2 + n3) % 10 === t2;
+            const check3 = (t1 + t2 + n3) % 10 === t3;
 
-            const decryptedNum = Number(M);
-
-            // 提出された「名前」から、本来あるべきハッシュメッセージの数値を計算
-            let expectedNameHash = 0;
-            for (let i = 0; i < namePart.length; i++) {
-                expectedNameHash += namePart.charCodeAt(i);
-            }
-            const expectedM = 500 + (expectedNameHash % 100);
-
-            // 🔵 復号した数値と、入力された名前から割り出した数値が100%一致するか検証
-            if (decryptedNum === expectedM) {
-                result.innerText = `認証可（本物）\n発行者: ${namePart}`;
+            if (check1 && check2 && check3) {
+                result.innerText = "認証可（コード一致：本物）";
                 result.className = "result-box status-success";
-            } else {
-                result.innerText = "認証不可\n（名前または暗号が書き換えられています）";
-                result.className = "result-box status-error";
+                return;
             }
-        } catch (e) {
-            result.innerText = "認証不可\n（解析エラー）";
-            result.className = "result-box status-error";
         }
+        
+        result.innerText = "認証不可（不正なコード）";
+        result.className = "result-box status-error";
     }
   </script>
 </body>
