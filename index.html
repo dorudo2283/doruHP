@@ -79,6 +79,12 @@
         transform: translateY(-1px); 
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
     }
+
+    /* 🔵 運営募集フォーム：グラデーションで特別感を演出した最上部ボタン */
+    .btn-recruitment { background: linear-gradient(135deg, #0052cc, #007bff); color: white; border: none; font-weight: 700; gap: 8px; }
+    @media (hover: hover) {
+        .btn-recruitment:hover { background: linear-gradient(135deg, #0066ff, #3399ff); color: white; }
+    }
     
     /* 🔵 アプデ情報：存在感のあるディープブルーのライト版 */
     .btn-update { background: #e6f0fa; border-color: #c8def5; color: #0052cc; }
@@ -128,21 +134,26 @@
   <div class="container">
     <p class="sub-text">マイクラ統合版 参加型サーバー<br>ドル鯖公式ホームページへようこそ</p>
 
-    <div class="group-title">NEWS</div>
+    <div class="group-title">募集</div>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSe2fkIo2BZdX3afLDcCgVmeSSwmZ5_iHbcPOMcQ9WnQ_yqqyw/viewform?usp=dialog" class="button btn-recruitment" target="_blank">
+      <i class="fa-solid fa-file-signature"></i> 運営募集フォーム
+    </a>
+
+    <div class="group-title">最新情報</div>
     <a href="updates.html" class="button btn-update">アプデ情報を確認する</a>
 
-    <div class="group-title">JOIN</div>
+    <div class="group-title">参加情報</div>
     <a href="Num.html" class="button btn-main">認証コード発行</a>
     <a href="access.html" class="button">サーバーの入り方・情報</a>
 
-    <div class="group-title">INFORMATION</div>
+    <div class="group-title">インフォメーション</div>
     <div class="btn-grid">
       <a href="rules.html" class="button">ルール</a>
       <a href="Q.html" class="button">よくある質問</a>
     </div>
     <a href="GofList.html" class="button">公開ワールド一覧・攻略</a>
 
-    <div class="group-title">COMMUNITY</div>
+    <div class="group-title">コミュニティ</div>
     <div class="btn-grid">
       <a href="members.html" class="button">メンバー紹介</a>
       <a href="addons.html" class="button">アドオン紹介</a>
@@ -165,5 +176,3 @@
   </script>
 </body>
 </html>
-運営募集フォーム
-https://docs.google.com/forms/d/e/1FAIpQLSe2fkIo2BZdX3afLDcCgVmeSSwmZ5_iHbcPOMcQ9WnQ_yqqyw/viewform?usp=dialog
