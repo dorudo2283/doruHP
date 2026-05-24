@@ -7,14 +7,15 @@
     <style>
         body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; text-align: center; color: #333; line-height: 1.6; }
         
-        /* ヘッダー・サイドメニュー（rules.html / Admin.html と完全に同一に統一） */
+        /* ヘッダー・サイドメニュー（公式トップと完全同期） */
         .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
         .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
         .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
         .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
         .side-menu.open { left: 0; }
-        .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; text-align: left; } /* 🔵 左寄せに統一 */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; text-align: left; }
+        .side-menu a:hover { color: #fff; background: #222; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
         .overlay.show { display: block; }
         
         /* コンテンツエリア */
@@ -32,12 +33,12 @@
         .code-container { margin: 20px 0; }
         .code-display { font-size: 32px; font-weight: bold; color: #007bff; padding: 20px; background: #e0f2fe; border-radius: 14px; border: 2px dashed #007bff; letter-spacing: 3px; }
         
-        /* ボタン設定（メイン発行ボタンと、新設のコピーボタン） */
+        /* ボタン設定 */
         .btn-main { display: flex; align-items: center; justify-content: center; background: #007bff; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s, opacity 0.2s; margin-bottom: 12px; }
         .btn-main:hover { background: #0056b3; }
         .btn-main:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
         
-        /* 🔵 コピー専用のセカンダリボタン（グレー基調で役割を視覚的に分離） */
+        /* コピーボタン */
         .btn-copy { display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #334155; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; margin-bottom: 20px; }
         .btn-copy:hover { background: #cbd5e1; }
         .btn-copy:disabled { background: #f1f5f9; color: #cbd5e1; cursor: not-allowed; }
@@ -83,7 +84,6 @@
             </div>
             
             <button id="submitBtn" class="btn-main" onclick="generateMatrix6Code()" disabled>コードを発行する</button>
-            
             <button id="copyBtn" class="btn-copy" onclick="copyToClipboard()" disabled>コードをコピーする</button>
             
             <div class="notice">
@@ -129,8 +129,6 @@
 
             document.getElementById('codeArea').innerText = hStr + "-" + c1 + c2 + c3;
             isGenerated = true;
-            
-            // 🔵 コード生成時にコピーボタンを有効化
             document.getElementById('copyBtn').disabled = false;
         }
 
