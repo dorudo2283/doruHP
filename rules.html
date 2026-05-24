@@ -23,17 +23,17 @@
         h1 { font-size: 26px; text-align: center; margin-bottom: 30px; color: #111; }
         
         .section-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        .section-title { font-size: 20px; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .section-title { font-size: 20px; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; }
         
         /* 規約リスト */
         .rule-item { margin-bottom: 20px; }
-        .rule-item:last-child { margin-bottom: 0; } /* 最後の項目の余白を調整 */
-        .rule-header { font-weight: bold; font-size: 16px; display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-        .rule-desc { font-size: 14px; color: #555; padding-left: 28px; }
+        .rule-item:last-child { margin-bottom: 0; }
+        .rule-header { font-weight: bold; font-size: 16px; margin-bottom: 5px; color: #111; }
+        .rule-desc { font-size: 14px; color: #555; padding-left: 10px; } /* アイコンが消えたため余白を最適化 */
         
         /* 警告・処分の強調 */
         .punishment { color: #d32f2f; font-weight: bold; }
-        .notice { background: #fff4f4; border-left: 4px solid #d32f2f; padding: 10px; margin-top: 5px; border-radius: 4px; }
+        .notice { background: #fff4f4; border-left: 4px solid #d32f2f; padding: 10px; margin-top: 15px; border-radius: 4px; font-size: 14px; }
 
         .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
     </style>
@@ -63,7 +63,7 @@
         <h1>利用規約（ルール）</h1>
 
         <div class="section-card">
-            <div class="section-title"><i class="fa-solid fa-flag"></i> 基本方針</div>
+            <div class="section-title">基本方針</div>
             <div class="rule-item">
                 <div class="rule-header">第一 楽しみの共有</div>
                 <div class="rule-desc">全てのプレイヤーが心から楽しみ、笑顔で遊べるサーバーを目指します。</div>
@@ -79,21 +79,21 @@
         </div>
 
         <div class="section-card">
-            <div class="section-title"><i class="fa-solid fa-gavel"></i> 一般規約</div>
+            <div class="section-title">一般規約</div>
             <div class="rule-item">
-                <div class="rule-header"><i class="fa-solid fa-circle-exclamation"></i>第一条 荒らし</div>
+                <div class="rule-header">第一条 荒らし</div>
                 <div class="rule-desc">第一項 鯖内での荒らしは一切許可していません。<span class="punishment">荒らしを発見した場合、即キックまたはBANとなります。</span></div>
             </div>
             <div class="rule-item">
-                <div class="rule-header"><i class="fa-solid fa-triangle-exclamation"></i>第二条 迷惑行為</div>
+                <div class="rule-header">第二条 迷惑行為</div>
                 <div class="rule-desc">第一項 鯖内での迷惑行為を発見した場合は、一定の処分が下されます。また、迷惑度によってはキックやBANもあり得ますのでご注意ください。</div>
             </div>
             <div class="rule-item">
-                <div class="rule-header"><i class="fa-solid fa-comment-slash"></i>第三条 差別的発言・暴言</div>
+                <div class="rule-header">第三条 差別的発言・暴言</div>
                 <div class="rule-desc">第一項 チャットまたはその他方法で暴言または過度に不快な言葉を発した場合は厳重注意となります。また、エメラルド窃盗は対応が難しいことがあります。また、PVP地での窃盗などは対応不可です。</div>
             </div>
             <div class="rule-item">
-                <div class="rule-header"><i class="fa-solid fa-user-slash"></i>第四条 差別的行為・不快な行為</div>
+                <div class="rule-header">第四条 差別的行為・不快な行為</div>
                 <div class="rule-desc">第一項 差別的発言または過度に不快な行為を行った場合は厳重注意またはキック処分となります。</div>
             </div>
             <div class="rule-item">
@@ -115,7 +115,7 @@
         </div>
 
         <div class="section-card">
-            <div class="section-title"><i class="fa-solid fa-shield-xmark"></i> 処分について</div>
+            <div class="section-title">処分について</div>
             <div class="rule-item">
                 <div class="rule-desc">
                     各規約に違反した場合、運営チームの判断により以下の処分を下します。<br><br>
