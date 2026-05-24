@@ -1,113 +1,140 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>認証コード発行 - DORUDO SERVER</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  <style>
-    body { margin: 0; font-family: sans-serif; background: #f0f4f8; padding-top: 80px; text-align: center; color: #333; }
-    /* 🔵 マッキンゼーブルーを基調としたヘッダー */
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #002D72; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; box-shadow: 0 2px 10px rgba(0,45,114,0.2); }
-    .menu-btn { font-size: 24px; cursor: pointer; }
-    .header-title { font-weight: 700; font-size: 16px; color: #fff; text-decoration: none; letter-spacing: 1px; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #001F52; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-    .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: #cbd5e1; text-decoration: none; text-align: left; border-bottom: 1px solid #002D72; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
-    .overlay.show { display: block; }
-    
-    .container { width: 92%; max-width: 500px; margin: 40px auto; }
-    h2 { color: #002D72; font-weight: 700; margin-bottom: 25px; }
-    
-    /* 🔵 カード＆入力フォーム */
-    .card { background: white; padding: 35px 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,45,114,0.06); box-sizing: border-box; border: 1px solid #e2e8f0; }
-    .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #cbd5e1; background: #f8fafc; margin-bottom: 25px; box-sizing: border-box; font-size: 16px; text-align: center; font-weight: 600; transition: 0.2s; }
-    .input-style:focus { background: #fff; border-color: #002D72; outline: none; }
-    
-    /* 🔵 鮮やかなライトブルーのコードエリア */
-    .code-container { position: relative; margin: 25px 0; }
-    .code-display { font-size: 32px; font-weight: bold; color: #002D72; padding: 20px; background: #e0f2fe; border-radius: 14px; border: 2px dashed #0052cc; cursor: pointer; letter-spacing: 3px; }
-    .copy-icon-btn { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 22px; color: #0052cc; pointer-events: none; }
-    
-    /* 🔵 ボタン */
-    .btn-main { display: flex; align-items: center; justify-content: center; background: #002D72; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; }
-    .btn-main:hover { background: #0040a3; }
-    
-    /* 🔴 ご要望の赤文字注意書き */
-    .disclaimer-red { color: #D92B2B; font-weight: 700; font-size: 14px; margin-top: 30px; line-height: 1.6; text-align: center; background: #fff1f1; padding: 15px; border-radius: 12px; border: 1px solid #fecaca; }
-    
-    .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(0, 45, 114, 0.95); color: white; padding: 14px 28px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 3000; transition: bottom 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-    .toast.show { bottom: 40px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>認証コード発行 - DORUDO SERVER</title>
+    <style>
+        /* 🔵 rules.htmlのトーン＆マナーに完全統一 */
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; text-align: center; color: #333; line-height: 1.6; }
+        
+        /* ヘッダー・サイドメニュー（共通） */
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+        .side-menu.open { left: 0; }
+        .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .overlay.show { display: block; }
+        
+        /* コンテンツエリア */
+        .container { width: 92%; max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 30px; color: #111; }
+        
+        /* 🔵 カードデザインを統一（角丸20px、軽い影） */
+        .section-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; box-sizing: border-box; }
+        
+        /* 入力フォーム */
+        .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #cbd5e1; background: #f8fafc; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; font-weight: 600; transition: 0.2s; }
+        .input-style:focus { background: #fff; border-color: #007bff; outline: none; }
+        
+        /* コード表示エリア（絵文字アイコン削除に伴い右側の余白を均等に調整） */
+        .code-container { margin: 20px 0; }
+        .code-display { font-size: 32px; font-weight: bold; color: #007bff; padding: 20px; background: #e0f2fe; border-radius: 14px; border: 2px dashed #007bff; cursor: pointer; letter-spacing: 3px; }
+        
+        /* ボタン設定（無効化時は半透明にして行動を制限） */
+        .btn-main { display: flex; align-items: center; justify-content: center; background: #007bff; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s, opacity 0.2s; }
+        .btn-main:hover { background: #0056b3; }
+        .btn-main:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
+        
+        /* 🔴 警告・注意書きのスタイル統一（アイコン消去） */
+        .punishment { color: #d32f2f; font-weight: bold; }
+        .notice { background: #fff4f4; border-left: 4px solid #d32f2f; padding: 15px; margin-top: 25px; border-radius: 4px; text-align: left; font-size: 14px; }
+        
+        .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(17, 17, 17, 0.95); color: white; padding: 14px 28px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 3000; transition: bottom 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
+        .toast.show { bottom: 40px; }
+        
+        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
 </head>
 <body>
 
-  <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-  <div id="sideMenu" class="side-menu">
-    <a href="index.html">トップ</a>
-    <a href="Num.html">認証コード発行</a>
-    <a href="Admin.html">管理者パネル</a>
-  </div>
-
-  <div class="header-bar">
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
-    <a href="index.html" class="header-title">DORUDO SERVER</a>
-    <div style="width: 40px;"></div>
-  </div>
-
-  <div class="container">
-    <h2>認証コード発行</h2>
-    <div class="card">
-        <input type="text" id="userNameInput" class="input-style" placeholder="お名前を入力してください" maxlength="15">
-        
-        <div class="code-container" onclick="copyToClipboard()">
-            <div id="codeArea" class="code-display">-----</div>
-            <i class="fa-regular fa-copy copy-icon-btn"></i>
-        </div>
-        <button class="btn-main" onclick="generateMatrix6Code()">コードを発行する</button>
-        
-        <div class="disclaimer-red">
-          <i class="fa-solid fa-circle-exclamation"></i> このコードは決して他人に教えないでください。<br>
-          また、このコードは鯖主へ直接 <strong>DM</strong> で伝えてください。
-        </div>
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="sideMenu" class="side-menu">
+        <a href="index.html">トップ</a>
+        <a href="updates.html">アプデ情報</a>
+        <a href="Num.html">認証コード発行</a>
+        <a href="access.html">鯖の入り方・情報</a>
+        <a href="rules.html">ルール</a>
+        <a href="Q.html">よくある質問</a>
+        <a href="GofList.html">ワールド一覧</a>
+        <a href="members.html">メンバー紹介</a>
+        <a href="Admin.html">管理者パネル</a>
     </div>
-  </div>
 
-  <div id="copyToast" class="toast">クリップボードにコピーしました</div>
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
+        <div style="width: 40px;"></div>
+    </div>
 
-  <script>
-    function toggleMenu() {
-      document.getElementById('sideMenu').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('show');
-    }
+    <div class="container">
+        <h1>認証コード発行</h1>
+        
+        <div class="section-card">
+            <input type="text" id="userNameInput" class="input-style" placeholder="お名前を入力してください" maxlength="15" oninput="checkInput()">
+            
+            <div class="code-container" onclick="copyToClipboard()">
+                <div id="codeArea" class="code-display">-----</div>
+            </div>
+            
+            <button id="submitBtn" class="btn-main" onclick="generateMatrix6Code()" disabled>コードを発行する</button>
+            
+            <div class="notice">
+                このコードは決して他人に教えないでください。<br>
+                また、このコードは鯖主へ直接<strong>DM</strong>で伝えてください。
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-link">トップに戻る</a>
+    </div>
 
-    let isGenerated = false;
+    <div id="copyToast" class="toast">クリップボードにコピーしました</div>
 
-    function generateMatrix6Code() {
-        const head = Math.floor(100 + Math.random() * 900);
-        const hStr = head.toString();
+    <script>
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
 
-        const n1 = parseInt(hStr[0]);
-        const n2 = parseInt(hStr[1]);
-        const n3 = parseInt(hStr[2]);
+        let isGenerated = false;
 
-        const c1 = (n1 + n2) % 10;
-        const c2 = (n2 + n3) % 10;
-        const c3 = (c1 + c2 + n3) % 10;
+        // 🔵 名前の入力状態を監視して、ボタンの有効/無効を切り替える関数
+        function checkInput() {
+            const inputVal = document.getElementById('userNameInput').value.trim();
+            const btn = document.getElementById('submitBtn');
+            if (inputVal.length > 0) {
+                btn.disabled = false;
+            } else {
+                btn.disabled = true;
+            }
+        }
 
-        document.getElementById('codeArea').innerText = hStr + "-" + c1 + c2 + c3;
-        isGenerated = true;
-    }
+        function generateMatrix6Code() {
+            const head = Math.floor(100 + Math.random() * 900);
+            const hStr = head.toString();
 
-    function copyToClipboard() {
-        if (!isGenerated) return;
-        navigator.clipboard.writeText(document.getElementById('codeArea').innerText).then(() => {
-            const toast = document.getElementById('copyToast');
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 2000);
-        });
-    }
-  </script>
+            const n1 = parseInt(hStr[0]);
+            const n2 = parseInt(hStr[1]);
+            const n3 = parseInt(hStr[2]);
+
+            const c1 = (n1 + n2) % 10;
+            const c2 = (n2 + n3) % 10;
+            const c3 = (c1 + c2 + n3) % 10;
+
+            document.getElementById('codeArea').innerText = hStr + "-" + c1 + c2 + c3;
+            isGenerated = true;
+        }
+
+        function copyToClipboard() {
+            if (!isGenerated) return;
+            navigator.clipboard.writeText(document.getElementById('codeArea').innerText).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.classList.add('show');
+                setTimeout(() => { toast.classList.remove('show'); }, 2000);
+            });
+        }
+    </script>
 </body>
 </html>
