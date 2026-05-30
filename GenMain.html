@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ジェネレータＰＶＰ 詳細 - DORUDO SERVER</title>
+    <style>
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; line-height: 1.6; }
+        
+        /* ヘッダー・サイドメニュー（完全同期） */
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+        .side-menu.open { left: 0; }
+        .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; text-align: left; }
+        .side-menu a:hover { color: #fff; background: #222; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+        .overlay.show { display: block; }
+        
+        /* コンテンツエリア */
+        .container { width: 92%; max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
+        
+        /* 🔵 最上部：名前・ジャンル用のカード（チャンキング設計） */
+        .title-card { background: white; padding: 30px 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 20px; box-sizing: border-box; }
+        .world-name { font-size: 26px; font-weight: bold; color: #111; margin: 0 0 8px 0; }
+        .world-genre { display: inline-block; background: #e0f2fe; color: #007bff; font-weight: bold; font-size: 13px; padding: 4px 14px; border-radius: 20px; }
+        
+        /* 🔵 下部：項目と説明用のメインカード */
+        .info-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); text-align: left; box-sizing: border-box; }
+        
+        .info-section { margin-bottom: 25px; }
+        .info-section:last-child { margin-bottom: 0; }
+        .info-label { font-size: 16px; font-weight: bold; color: #007bff; border-left: 4px solid #007bff; padding-left: 10px; margin-bottom: 8px; }
+        .info-desc { font-size: 14px; color: #475569; padding-left: 14px; }
+        
+        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
+</head>
+<body>
 
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="sideMenu" class="side-menu">
+        <a href="index.html">トップ</a>
+        <a href="updates.html">アプデ情報</a>
+        <a href="Num.html">認証コード発行</a>
+        <a href="access.html">鯖の入り方・情報</a>
+        <a href="rules.html">ルール</a>
+        <a href="Q.html">よくある質問</a>
+        <a href="GofList.html">ワールド一覧</a>
+        <a href="members.html">メンバー紹介</a>
+        <a href="Admin.html">管理者パネル</a>
+    </div>
+
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
+        <div style="width: 40px;"></div>
+    </div>
+
+    <div class="container">
+        
+        <div class="title-card">
+            <h1 class="world-name">ジェネレータＰＶＰ</h1>
+            <span class="world-genre">PVP / チーム戦 / 資源競争</span>
+        </div>
+        
+        <div class="info-card">
+            <div class="info-section">
+                <div class="info-label">ワールド概要</div>
+                <div class="info-desc">当サーバー内でもトップクラスの歴史を持つ伝統的なPVPマップです。時間経過で中央のジェネレータから生成される資源を奪い合い、装備を強化して敵チームの撃破を目指します。</div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-label">基本ルール</div>
+                <div class="info-desc">集めた素材を使ってショップで強力な武器や防具、回復アイテムを交換できます。チーム間での連携や、ジェネレータの防衛・制圧タイミングが勝利の鍵を握ります。</div>
+            </div>
+            
+            <div class="info-section">
+                <div class="info-label">注意事項</div>
+                <div class="info-desc">試合中の故意な途中抜けや、味方プレイヤーの妨害となる行為はルール違反となります。マナーを守って健全にバトルを楽しみましょう。</div>
+            </div>
+        </div>
+        
+        <a href="GofList.html" class="back-link">ワールド一覧に戻る</a>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
