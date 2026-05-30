@@ -25,13 +25,13 @@
         /* 全体を包むメインカード */
         .main-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; box-sizing: border-box; }
         
-        /* 🔵 各ワールドカードをリンク（ボタン風）に修正 */
+        /* 各ワールドカード（リンク） */
         .world-link { display: block; text-decoration: none; color: inherit; margin-bottom: 16px; box-sizing: border-box; }
         .world-link:last-child { margin-bottom: 0; }
         
-        .world-item { text-align: left; padding: 16px 20px; background: #f8fafc; border-radius: 12px; box-sizing: border-box; transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+        .world-item { position: relative; text-align: left; padding: 16px 20px; background: #f8fafc; border-radius: 12px; box-sizing: border-box; transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
         
-        /* 🔵 ホバー時に上に浮き上がるトップページ共通のエフェクト */
+        /* ホバーエフェクト */
         @media (hover: hover) {
             .world-link:hover .world-item {
                 transform: translateY(-4px);
@@ -39,15 +39,19 @@
             }
         }
         
+        /* 🔵 追加：詳細を促す誘導テキスト（シグニファイア）のスタイル */
+        .tap-guide { position: absolute; top: 16px; right: 20px; font-size: 11px; font-weight: 700; color: #007bff; letter-spacing: 0.5px; }
+        .world-leak .tap-guide { color: #d97706; } /* リーク時はオレンジ色に同期 */
+
         /* 通常公開中のワールド */
-        .world-active { border-left: 5px solid #007bff; }
+        .world-active { border-left: 5px solid #007bff; padding-right: 90px; } /* 文字の被り防止に右パディングを追加 */
         .world-active h3 { color: #007bff; }
         
         /* 先行情報・リーク */
-        .world-leak { border-left: 5px solid #f59e0b; background: #fffbeb; }
+        .world-leak { border-left: 5px solid #f59e0b; background: #fffbeb; padding-right: 90px; }
         .world-leak h3 { color: #d97706; }
         
-        /* 空き枠（クリック不可にするためカーソルとホバーを変更） */
+        /* 空き枠 */
         .world-link-disabled { cursor: not-allowed; pointer-events: none; }
         .world-empty { border-left: 5px solid #cbd5e1; opacity: 0.6; }
         .world-empty h3 { color: #64748b; }
@@ -85,6 +89,7 @@
         <div class="main-card">
             <a href="GenMain.html" class="world-link">
                 <div class="world-item world-active">
+                    <span class="tap-guide">詳細をタップ ➔</span>
                     <h3>ジェネレータＰＶＰ</h3>
                     <p>当鯖でもかなり古いＭＡＰ。人気もそれなりに高い。</p>
                 </div>
@@ -92,6 +97,7 @@
             
             <a href="#" class="world-link">
                 <div class="world-item world-active">
+                    <span class="tap-guide">詳細をタップ ➔</span>
                     <h3>ゲキムズアスレチック</h3>
                     <p>主が一から作ったゲキムズアスレチック。人気がかなり高い。</p>
                 </div>
@@ -99,6 +105,7 @@
             
             <a href="#" class="world-link">
                 <div class="world-item world-leak">
+                    <span class="tap-guide">詳細をタップ ➔</span>
                     <h3>リーク　？？？</h3>
                     <p>今年8月に公開予定</p>
                 </div>
