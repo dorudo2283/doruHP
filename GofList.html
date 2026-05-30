@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ワールド一覧 - DORUDO SERVER</title>
     <style>
-        /* 🔵 rules.html / Num.html / Admin.html と完全にトーン＆マナーを統一 */
         body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; line-height: 1.6; }
         
         /* ヘッダー・サイドメニュー（公式トップと完全同期） */
@@ -26,19 +25,30 @@
         /* 全体を包むメインカード */
         .main-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; box-sizing: border-box; }
         
-        /* 🔵 各ワールドカード：認知的に状態を識別しやすく色分け */
-        .world-item { text-align: left; padding: 16px 20px; background: #f8fafc; margin-bottom: 16px; border-radius: 12px; box-sizing: border-box; transition: transform 0.2s; }
-        .world-item:last-child { margin-bottom: 0; }
+        /* 🔵 各ワールドカードをリンク（ボタン風）に修正 */
+        .world-link { display: block; text-decoration: none; color: inherit; margin-bottom: 16px; box-sizing: border-box; }
+        .world-link:last-child { margin-bottom: 0; }
         
-        /* 通常公開中のワールド（ドル鯖ブルー） */
+        .world-item { text-align: left; padding: 16px 20px; background: #f8fafc; border-radius: 12px; box-sizing: border-box; transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.25s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; }
+        
+        /* 🔵 ホバー時に上に浮き上がるトップページ共通のエフェクト */
+        @media (hover: hover) {
+            .world-link:hover .world-item {
+                transform: translateY(-4px);
+                box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            }
+        }
+        
+        /* 通常公開中のワールド */
         .world-active { border-left: 5px solid #007bff; }
         .world-active h3 { color: #007bff; }
         
-        /* 先行情報・リーク（ゴールド/オレンジ） */
+        /* 先行情報・リーク */
         .world-leak { border-left: 5px solid #f59e0b; background: #fffbeb; }
         .world-leak h3 { color: #d97706; }
         
-        /* 空き枠（ライトグレーで視覚的優先度を下げる） */
+        /* 空き枠（クリック不可にするためカーソルとホバーを変更） */
+        .world-link-disabled { cursor: not-allowed; pointer-events: none; }
         .world-empty { border-left: 5px solid #cbd5e1; opacity: 0.6; }
         .world-empty h3 { color: #64748b; }
         
@@ -73,32 +83,39 @@
         <h1>公開ワールド一覧</h1>
         
         <div class="main-card">
-            <div class="world-item world-active">
-                <h3>ジェネレータＰＶＰ</h3>
-                <p>当鯖でもかなり古いＭＡＰ。人気もそれなりに高い。</p>
-            </div>
+            <a href="GenMain.html" class="world-link">
+                <div class="world-item world-active">
+                    <h3>ジェネレータＰＶＰ</h3>
+                    <p>当鯖でもかなり古いＭＡＰ。人気もそれなりに高い。</p>
+                </div>
+            </a>
             
-            <div class="world-item world-active">
-                <h3>ゲキムズアスレチック</h3>
-                <p>主が一から作ったゲキムズアスレチック。人気がかなり高い。</p>
-            </div>
+            <a href="#" class="world-link">
+                <div class="world-item world-active">
+                    <h3>ゲキムズアスレチック</h3>
+                    <p>主が一から作ったゲキムズアスレチック。人気がかなり高い。</p>
+                </div>
+            </a>
             
-            <div class="world-item world-leak">
-                <h3>リーク　？？？</h3>
-                <p>今年8月に公開予定</p>
-            </div>
+            <a href="#" class="world-link">
+                <div class="world-item world-leak">
+                    <h3>リーク　？？？</h3>
+                    <p>今年8月に公開予定</p>
+                </div>
+            </a>
             
-            <div class="world-item world-empty">
-                <h3>non</h3>
-                <p>---</p>
-            </div>
+            <a href="#" class="world-link world-link-disabled">
+                <div class="world-item world-empty">
+                    <h3>non</h3>
+                    <p>---</p>
+                </div>
+            </a>
         </div>
         
         <a href="index.html" class="back-link">トップに戻る</a>
     </div>
 
     <script>
-        // 🔵 正常に動作するサイドメニューのスクリプト
         function toggleMenu() {
             document.getElementById('sideMenu').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('show');
