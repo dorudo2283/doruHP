@@ -1,51 +1,108 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ワールド一覧 - DORUDO SERVER</title>
-  <style>
-    /* 共通スタイル（省略） */
-    body { margin: 0; font-family: -apple-system, sans-serif; background: #f5f5f5; padding-top: 80px; color: #333; }
-    .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-    .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-    .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-    .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-    .side-menu.open { left: 0; }
-    .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
-    .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
-    .overlay.show { display: block; }
-    .container { width: 92%; max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-sizing: border-box; }
-    h1 { font-size: 22px; border-left: 5px solid #ff4d4d; padding-left: 15px; margin-bottom: 20px; }
-    .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
-    .world-item { border-left: 4px solid #4caf50; padding: 10px 15px; background: #f9f9f9; margin-bottom: 15px; border-radius: 0 8px 8px 0; }
-    .world-item h3 { margin: 0; font-size: 18px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ワールド一覧 - DORUDO SERVER</title>
+    <style>
+        /* 🔵 rules.html / Num.html / Admin.html と完全にトーン＆マナーを統一 */
+        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; line-height: 1.6; }
+        
+        /* ヘッダー・サイドメニュー（公式トップと完全同期） */
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
+        .side-menu.open { left: 0; }
+        .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; text-align: left; }
+        .side-menu a:hover { color: #fff; background: #222; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+        .overlay.show { display: block; }
+        
+        /* コンテンツエリア */
+        .container { width: 92%; max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
+        h1 { font-size: 26px; text-align: center; margin-bottom: 30px; color: #111; }
+        
+        /* 全体を包むメインカード */
+        .main-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; box-sizing: border-box; }
+        
+        /* 🔵 各ワールドカード：認知的に状態を識別しやすく色分け */
+        .world-item { text-align: left; padding: 16px 20px; background: #f8fafc; margin-bottom: 16px; border-radius: 12px; box-sizing: border-box; transition: transform 0.2s; }
+        .world-item:last-child { margin-bottom: 0; }
+        
+        /* 通常公開中のワールド（ドル鯖ブルー） */
+        .world-active { border-left: 5px solid #007bff; }
+        .world-active h3 { color: #007bff; }
+        
+        /* 先行情報・リーク（ゴールド/オレンジ） */
+        .world-leak { border-left: 5px solid #f59e0b; background: #fffbeb; }
+        .world-leak h3 { color: #d97706; }
+        
+        /* 空き枠（ライトグレーで視覚的優先度を下げる） */
+        .world-empty { border-left: 5px solid #cbd5e1; opacity: 0.6; }
+        .world-empty h3 { color: #64748b; }
+        
+        .world-item h3 { margin: 0 0 6px 0; font-size: 18px; font-weight: bold; }
+        .world-item p { margin: 0; font-size: 14px; color: #475569; }
+        
+        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>ワールド一覧</h1>
-    <div class="world-item">
-      <h3>ジェネレータＰＶＰ</h3>
-      <p>当鯖でもかなり古いＭＡＰ。人気もそれなりに高い。</p>
+
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="sideMenu" class="side-menu">
+        <a href="index.html">トップ</a>
+        <a href="updates.html">アプデ情報</a>
+        <a href="Num.html">認証コード発行</a>
+        <a href="access.html">鯖の入り方・情報</a>
+        <a href="rules.html">ルール</a>
+        <a href="Q.html">よくある質問</a>
+        <a href="GofList.html">ワールド一覧</a>
+        <a href="members.html">メンバー紹介</a>
+        <a href="Admin.html">管理者パネル</a>
     </div>
-    
-    <div class="world-item">
-      <h3>ゲキムズアスレチック</h3>
-      <p>主が一から作ったゲキムズアスレチック。人気がかなり高い。</p>
+
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
+        <div style="width: 40px;"></div>
     </div>
-    
-    <div class="world-item">
-      <h3>リーク　？？？</h3>
-      <p>今年8月に公開</p>
+
+    <div class="container">
+        <h1>公開ワールド一覧</h1>
+        
+        <div class="main-card">
+            <div class="world-item world-active">
+                <h3>ジェネレータＰＶＰ</h3>
+                <p>当鯖でもかなり古いＭＡＰ。人気もそれなりに高い。</p>
+            </div>
+            
+            <div class="world-item world-active">
+                <h3>ゲキムズアスレチック</h3>
+                <p>主が一から作ったゲキムズアスレチック。人気がかなり高い。</p>
+            </div>
+            
+            <div class="world-item world-leak">
+                <h3>リーク　？？？</h3>
+                <p>今年8月に公開予定</p>
+            </div>
+            
+            <div class="world-item world-empty">
+                <h3>non</h3>
+                <p>---</p>
+            </div>
+        </div>
+        
+        <a href="index.html" class="back-link">トップに戻る</a>
     </div>
-    
-    <div class="world-item">
-      <h3>non</h3>
-      <p>---</p>
-    </div>
-  </div>
-  <a href="index.html" class="back-link">トップに戻る</a>
-  <script>function toggleMenu(){document.getElementById('sideMenu').classList.toggle('open');document.getElementById('overlay').classList.toggle('show');}</script>
+
+    <script>
+        // 🔵 正常に動作するサイドメニューのスクリプト
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
+    </script>
 </body>
 </html>
