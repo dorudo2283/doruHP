@@ -4,52 +4,203 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>認証コード発行 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; text-align: center; color: #333; line-height: 1.6; }
+        /* ==========================================================================
+           ベースデザイン：トップページと完全同期する【プレミアム・ホワイト】UI
+           ========================================================================== */
+        body { 
+            margin: 0; 
+            font-family: -apple-system, "SF Pro Display", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif; 
+            background: #f4f7fc; 
+            padding-top: 80px; 
+            color: #0f172a; 
+            touch-action: manipulation;
+            letter-spacing: 0.04em;
+        }
         
-        /* ヘッダー・サイドメニュー（公式トップと完全同期） */
-        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-        .side-menu.open { left: 0; }
-        .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; text-align: left; }
-        .side-menu a:hover { color: #fff; background: #222; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+        /* ヘッダー */
+        .header-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 60px; 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid #0284c7; 
+            color: #0f172a; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
+            box-sizing: border-box; 
+            z-index: 1000; 
+        }
+        .header-bar::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: rgba(2, 132, 199, 0.2);
+        }
+        .menu-btn { font-size: 20px; cursor: pointer; width: 40px; color: #0284c7; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 900; font-size: 14px; text-decoration: none; color: #0f172a; white-space: nowrap; letter-spacing: 2px; }
+
+        /* サイドメニュー */
+        .side-menu { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #ffffff; color: #0f172a; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; padding-top: 60px; box-sizing: border-box; border-right: 2px solid #0284c7; }
+        .side-menu.open { transform: translateX(260px); }
+        .side-menu a { display: block; padding: 16px 28px; color: #334155; text-decoration: none; font-size: 13px; font-weight: 600; border-bottom: 1px solid rgba(0,0,0,0.04); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.2); display: none; z-index: 1500; backdrop-filter: blur(4px); }
         .overlay.show { display: block; }
-        
+
         /* コンテンツエリア */
-        .container { width: 92%; max-width: 500px; margin: 0 auto; padding-bottom: 50px; }
-        h1 { font-size: 26px; text-align: center; margin-bottom: 30px; color: #111; }
+        .container { width: 90%; max-width: 440px; margin: 0 auto; box-sizing: border-box; }
         
-        /* カードデザイン */
-        .section-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; box-sizing: border-box; }
+        /* ページタイトル */
+        h1 { 
+            font-size: 18px; 
+            font-weight: 900; 
+            text-align: center; 
+            margin-bottom: 35px; 
+            color: #0f172a; 
+            letter-spacing: 2px;
+        }
         
-        /* 入力フォーム */
-        .input-style { width: 100%; padding: 16px; border-radius: 12px; border: 2px solid #cbd5e1; background: #f8fafc; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; text-align: center; font-weight: 600; transition: 0.2s; }
-        .input-style:focus { background: #fff; border-color: #007bff; outline: none; }
+        /* コンテンツカード */
+        .section-card { 
+            background: #ffffff; 
+            padding: 30px 24px; 
+            border: 1px solid rgba(2, 132, 199, 0.2); 
+            border-left: 4px solid #0284c7; 
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04); 
+            margin-bottom: 24px; 
+            position: relative;
+            text-align: center;
+        }
         
-        /* コード表示エリア */
-        .code-container { margin: 20px 0; }
-        .code-display { font-size: 32px; font-weight: bold; color: #007bff; padding: 20px; background: #e0f2fe; border-radius: 14px; border: 2px dashed #007bff; letter-spacing: 3px; }
+        /* 入力フォーム：精密なスクエアデザイン */
+        .input-style { 
+            width: 100%; 
+            padding: 16px; 
+            border: 1px solid rgba(2, 132, 199, 0.3); 
+            border-radius: 0px; 
+            background: #f8fafc; 
+            margin-bottom: 20px; 
+            box-sizing: border-box; 
+            font-size: 14px; 
+            text-align: center; 
+            font-weight: 700; 
+            color: #0f172a;
+            transition: all 0.2s; 
+        }
+        .input-style:focus { 
+            background: #ffffff; 
+            border-color: #0284c7; 
+            outline: none; 
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+        }
+        /* プレースホルダーの文字色 */
+        .input-style::placeholder { color: #94a3b8; font-weight: 500; }
         
-        /* ボタン設定 */
-        .btn-main { display: flex; align-items: center; justify-content: center; background: #007bff; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s, opacity 0.2s; margin-bottom: 12px; }
-        .btn-main:hover { background: #0056b3; }
-        .btn-main:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
+        /* コード表示エリア：デジタルフォント風に強調 */
+        .code-container { margin: 24px 0; }
+        .code-display { 
+            font-family: 'SF Mono', SFMono-Regular, Consolas, monospace;
+            font-size: 32px; 
+            font-weight: 800; 
+            color: #0284c7; 
+            padding: 18px; 
+            background: #f0fdf4; /* 控えめなミント白 */
+            border: 1px dashed rgba(2, 132, 199, 0.4); 
+            letter-spacing: 2px; 
+        }
         
-        /* コピーボタン */
-        .btn-copy { display: flex; align-items: center; justify-content: center; background: #e2e8f0; color: #334155; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; transition: background 0.2s; margin-bottom: 20px; }
-        .btn-copy:hover { background: #cbd5e1; }
-        .btn-copy:disabled { background: #f1f5f9; color: #cbd5e1; cursor: not-allowed; }
+        /* メイン発行ボタン（ドル鯖ブルー） */
+        .btn-main { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: #0284c7; 
+            color: white; 
+            border: 1px solid #0284c7; 
+            padding: 16px; 
+            border-radius: 0px; 
+            font-size: 13px; 
+            font-weight: 800; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: all 0.2s; 
+            margin-bottom: 12px; 
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.15);
+        }
+        .btn-main:active:not(:disabled) { background: #0ea5e9; transform: scale(0.98); }
+        .btn-main:disabled { 
+            background: #e2e8f0; 
+            border-color: #cbd5e1;
+            color: #94a3b8; 
+            cursor: not-allowed; 
+            box-shadow: none;
+        }
         
-        /* 注意書きのスタイル */
-        .notice { background: #fff4f4; border-left: 4px solid #d32f2f; padding: 15px; margin-top: 25px; border-radius: 4px; text-align: left; font-size: 14px; }
+        /* コピーボタン（サブボタンとして白背景に） */
+        .btn-copy { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: #ffffff; 
+            color: #475569; 
+            border: 1px solid rgba(2, 132, 199, 0.3); 
+            padding: 14px; 
+            border-radius: 0px; 
+            font-size: 13px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            width: 100%; 
+            transition: all 0.2s; 
+            margin-bottom: 20px; 
+        }
+        .btn-copy:active:not(:disabled) { background: #f8fafc; }
+        .btn-copy:disabled { 
+            background: #f1f5f9; 
+            color: #cbd5e1; 
+            border-color: #e2e8f0;
+            cursor: not-allowed; 
+        }
         
-        .toast { position: fixed; bottom: -60px; left: 50%; transform: translateX(-50%); background: rgba(17, 17, 17, 0.95); color: white; padding: 14px 28px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 3000; transition: bottom 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.15); }
-        .toast.show { bottom: 40px; }
+        /* 厳重注意書きボックス（ネオンレッド） */
+        .notice { 
+            background: rgba(211, 47, 47, 0.05); 
+            border-left: 3px solid #d32f2f; 
+            padding: 14px; 
+            margin-top: 25px; 
+            text-align: left; 
+            font-size: 12px; 
+            line-height: 1.7;
+            color: #334155;
+            font-weight: 600;
+        }
+        .notice strong { color: #d32f2f; font-weight: 800; }
         
-        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+        /* 戻るリンク */
+        .back-link { 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            text-align: center; 
+            margin: 20px 0 60px 0; 
+            color: #64748b; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        .back-link:active { color: #0284c7; }
     </style>
 </head>
 <body>
@@ -92,12 +243,11 @@
             </div>
         </div>
         
-        <a href="index.html" class="back-link">トップに戻る</a>
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
     </div>
 
-    <div id="copyToast" class="toast">クリップボードにコピーしました</div>
-
     <script>
+        // サイドメニュー開閉
         function toggleMenu() {
             document.getElementById('sideMenu').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('show');
@@ -105,16 +255,14 @@
 
         let isGenerated = false;
 
+        // 入力チェック
         function checkInput() {
             const inputVal = document.getElementById('userNameInput').value.trim();
             const btn = document.getElementById('submitBtn');
-            if (inputVal.length > 0) {
-                btn.disabled = false;
-            } else {
-                btn.disabled = true;
-            }
+            btn.disabled = inputVal.length === 0;
         }
 
+        // コード生成ロジック
         function generateMatrix6Code() {
             const head = Math.floor(100 + Math.random() * 900);
             const hStr = head.toString();
@@ -132,12 +280,29 @@
             document.getElementById('copyBtn').disabled = false;
         }
 
+        // クリップボードコピー（トースト廃止・ボタン内変化にアップデート）
         function copyToClipboard() {
             if (!isGenerated) return;
-            navigator.clipboard.writeText(document.getElementById('codeArea').innerText).then(() => {
-                const toast = document.getElementById('copyToast');
-                toast.classList.add('show');
-                setTimeout(() => { toast.classList.remove('show'); }, 2000);
+            const codeText = document.getElementById('codeArea').innerText;
+            
+            navigator.clipboard.writeText(codeText).then(() => {
+                const btn = document.getElementById('copyBtn');
+                
+                // コピー完了時のデザイン変化
+                btn.innerText = "コピー完了";
+                btn.style.background = "#10b981"; /* エメラルドグリーン */
+                btn.style.color = "#ffffff";
+                btn.style.borderColor = "#10b981";
+                btn.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.3)";
+                
+                // 1.5秒後に元の状態に戻す
+                setTimeout(() => {
+                    btn.innerText = "コードをコピーする";
+                    btn.style.background = "#ffffff";
+                    btn.style.color = "#475569";
+                    btn.style.borderColor = "rgba(2, 132, 199, 0.3)";
+                    btn.style.boxShadow = "none";
+                }, 1500);
             });
         }
     </script>
