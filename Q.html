@@ -6,29 +6,197 @@
     <title>よくある質問 - DORUDO SERVER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; }
-        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-        .side-menu.open { left: 0; }
-        .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        /* ==========================================================================
+           ベースデザイン：サイト全体と完全同期する【プレミアム・ホワイト】UI
+           ========================================================================== */
+        body { 
+            margin: 0; 
+            font-family: -apple-system, "SF Pro Display", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif; 
+            background: #f4f7fc; 
+            padding-top: 80px; 
+            color: #0f172a; 
+            touch-action: manipulation;
+            letter-spacing: 0.04em;
+        }
+        
+        /* ヘッダー */
+        .header-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 60px; 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid #0284c7; 
+            color: #0f172a; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
+            box-sizing: border-box; 
+            z-index: 1000; 
+        }
+        .header-bar::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: rgba(2, 132, 199, 0.2);
+        }
+        .menu-btn { font-size: 20px; cursor: pointer; width: 40px; color: #0284c7; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 900; font-size: 14px; text-decoration: none; color: #0f172a; white-space: nowrap; letter-spacing: 2px; }
+
+        /* サイドメニュー */
+        .side-menu { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #ffffff; color: #0f172a; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; padding-top: 60px; box-sizing: border-box; border-right: 2px solid #0284c7; }
+        .side-menu.open { transform: translateX(260px); }
+        .side-menu a { display: block; padding: 16px 28px; color: #334155; text-decoration: none; font-size: 13px; font-weight: 600; border-bottom: 1px solid rgba(0,0,0,0.04); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.2); display: none; z-index: 1500; backdrop-filter: blur(4px); }
         .overlay.show { display: block; }
-        .container { width: 92%; max-width: 600px; margin: 0 auto; }
-        h1 { font-size: 24px; text-align: center; margin-bottom: 20px; color: #111; }
-        .search-container { position: sticky; top: 70px; z-index: 900; background: #f0f7ff; padding: 10px 0; }
-        .search-box { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid #ddd; font-size: 16px; box-sizing: border-box; outline: none; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .search-box:focus { border-color: #007bff; background: #fff; }
-        .faq-item { background: white; border-radius: 12px; margin-bottom: 10px; border: 1px solid #ddd; overflow: hidden; }
-        .faq-question { width: 100%; padding: 18px; text-align: left; background: white; border: none; outline: none; display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-size: 15px; font-weight: bold; color: #333; }
-        .faq-question i { color: #007bff; transition: 0.3s; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; background: #fafafa; }
-        .faq-answer-inner { padding: 18px; font-size: 14px; line-height: 1.6; color: #555; border-top: 1px solid #eee; }
-        .faq-item.active .faq-answer { max-height: 500px; }
-        .faq-item.active .faq-question i { transform: rotate(180deg); }
-        .no-results { text-align: center; color: #888; padding: 40px 0; display: none; }
-        .back-link { display: block; text-align: center; margin: 40px 0; color: #888; text-decoration: none; font-size: 14px; }
+
+        /* コンテンツエリア */
+        .container { width: 90%; max-width: 440px; margin: 0 auto; box-sizing: border-box; }
+        
+        /* ページタイトル */
+        h1 { 
+            font-size: 18px; 
+            font-weight: 900; 
+            text-align: center; 
+            margin-bottom: 35px; 
+            color: #0f172a; 
+            letter-spacing: 2px;
+        }
+
+        /* 検索ボックス固定コンテナ */
+        .search-container { 
+            position: sticky; 
+            top: 60px; 
+            z-index: 900; 
+            background: #f4f7fc; 
+            padding: 14px 0; 
+        }
+        
+        /* 検索ボックスのスクエア化統一 */
+        .search-box { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border-radius: 0px; 
+            border: 1px solid rgba(2, 132, 199, 0.3); 
+            border-left: 4px solid #0f172a; /* 検索窓を引き締める黒アクセント */
+            font-size: 13px; 
+            font-weight: 600;
+            color: #0f172a;
+            box-sizing: border-box; 
+            outline: none; 
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+            transition: all 0.2s; 
+        }
+        .search-box:focus { 
+            border-color: #0284c7; 
+            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.08);
+        }
+
+        /* FAQアイテム（カード） */
+        .faq-item { 
+            background: #ffffff; 
+            border: 1px solid rgba(2, 132, 199, 0.2); 
+            margin-bottom: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02);
+            box-sizing: border-box;
+        }
+        
+        /* 質問ボタン */
+        .faq-question { 
+            width: 100%; 
+            padding: 18px 20px; 
+            text-align: left; 
+            background: #ffffff; 
+            border: none; 
+            outline: none; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            cursor: pointer; 
+            font-size: 13px; 
+            font-weight: 800; 
+            color: #0f172a; 
+            gap: 12px;
+            line-height: 1.5;
+        }
+        /* Q.の文字部分だけ色を変えるためのスタイル調整 */
+        .faq-question .q-prefix {
+            color: #0284c7;
+            font-weight: 900;
+            margin-right: 4px;
+        }
+        .faq-question i { 
+            color: #64748b; 
+            transition: transform 0.2s ease; 
+            font-size: 12px;
+            min-width: 14px;
+        }
+        
+        /* 回答エリア（アニメーション用） */
+        .faq-answer { 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: max-height 0.25s cubic-bezier(0.16, 1, 0.3, 1); 
+            background: #f8fafc; 
+        }
+        .faq-answer-inner { 
+            padding: 18px 20px; 
+            font-size: 13px; 
+            line-height: 1.7; 
+            color: #334155; 
+            border-top: 1px solid rgba(2, 132, 199, 0.1); 
+            font-weight: 600;
+        }
+        
+        /* 開閉時の変化 */
+        .faq-item.active {
+            border-left: 4px solid #0284c7; /* 開いたときにシグネチャーラインを強調 */
+        }
+        .faq-item.active .faq-question {
+            background: #ffffff;
+        }
+        .faq-item.active .faq-question i { 
+            transform: rotate(180deg); 
+            color: #0284c7;
+        }
+        
+        /* 検索結果ゼロ時のメッセージ */
+        .no-results { 
+            text-align: center; 
+            color: #94a3b8; 
+            padding: 40px 0; 
+            display: none; 
+            font-size: 13px;
+            font-weight: 700;
+            background: #ffffff;
+            border: 1px dashed rgba(2, 132, 199, 0.3);
+        }
+        
+        /* 戻るリンク */
+        .back-link { 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            text-align: center; 
+            margin: 30px 0 60px 0; 
+            color: #64748b; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        .back-link:active { color: #0284c7; }
     </style>
 </head>
 <body>
@@ -44,6 +212,7 @@
         <a href="members.html">メンバー紹介</a>
         <a href="Admin.html">管理者パネル</a>
     </div>
+    
     <div class="header-bar">
         <div class="menu-btn" onclick="toggleMenu()">☰</div>
         <a href="index.html" class="header-title">DORUDO SERVER</a>
@@ -52,116 +221,139 @@
 
     <div class="container">
         <h1>よくある質問</h1>
+        
+        <!-- 検索バー -->
         <div class="search-container">
             <input type="text" id="searchInput" class="search-box" placeholder="キーワードで検索..." onkeyup="filterFAQ()">
         </div>
 
+        <!-- FAQリスト -->
         <div id="faqList">
+            
             <div class="faq-item" data-keywords="サーバー はいりかた 参加 さんか 接続 せつぞく connect 承認 しょうにん フレンド ふれんど">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. フレンド申請したのに承認されません。
+                    <span><span class="q-prefix">Q.</span>フレンド申請したのに承認されません。</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        主が多忙な場合や、オフラインの時間は承認が遅れることがあります。お急ぎの場合は、主のフレンドとつなげて当鯖に入り、直接主に伝えてくれると早いです。ちなみに週２ぐらいのペースでフレンドは見ますのでご了承ください。
+                        主が多忙な場合や、オフラインの時間は承認が遅れることがあります。お急ぎの場合は、主のフレンドとつなげて当鯖に入り、直接主に伝えてくれると早いです。ちなみに週2回ほどのペースでフレンド登録を確認していますので、ご了承ください。
                     </div>
                 </div>
             </div>
 
             <div class="faq-item" data-keywords="認証 にんしょう できない コード 番号 ばんごう 間違い まちがい なぜ ">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. 認証コードとは。
+                    <span><span class="q-prefix">Q.</span>認証コードとは何ですか？</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        認証コードは本人がＢＯＴではないかなどの検査を行います。これをやらないと一部機能が利用できなかったり、優先順が下がることがあります。
+                        アクセスしているユーザーがBOT（自動プログラム）ではないかを検査するためのものです。これを行わないと、HPの一部機能が利用できなかったり、サーバー内の優先順位が下がることがあります。
                     </div>
                 </div>
             </div>
 
             <div class="faq-item" data-keywords="窃盗 せっとう 泥棒 どろぼう アイテム 盗まれた ぬすまれた チェスト 荒らし あらし">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. アイテムが盗まれたのですが。
+                    <span><span class="q-prefix">Q.</span>アイテムが盗まれたのですが。</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        窃盗は禁止事項です。すぐに運営または鯖主が直接確認しに行きます。確定的な証拠を確認出来たら本人に厳重注意などの処分を下します。しかし、見に行って後何も起こらなければこの通報は却下されますのでご了承ください。
+                        窃盗は全面禁止です。通報を受け次第、運営または鯖主が直接確認へ向かいます。確定的なログや証拠が確認できた場合、対象者に厳重注意などの処分を下します。ただし、調査の結果として証拠が一切確認できない場合は対応いたしかねますのでご了承ください。
                     </div>
                 </div>
             </div>
 
             <div class="faq-item" data-keywords="重い おもい ラグ 落ちる おちる 回線 かいせん 重すぎる ">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. 鯖が非常に重いです。
+                    <span><span class="q-prefix">Q.</span>サーバーが非常に重いです。</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        アドオンやコマンドなどが原因で重い場合は、一度入りなおしてみてください。
+                        アドオンや内部コマンドの一時的な負荷が原因でラグが発生している場合があります。その場合は、一度ゲームに入り直す（再接続する）ことで改善することがあります。
                     </div>
                 </div>
             </div>
 
-             <div class="faq-item" data-keywords="ジェネレータ ジェネ じぇねれーた じぇね PVP ジェネレータPVP 鍛治型 どこ アイテム ネザライトフルアップグレード 強化 ネザライト ショップ">
+            <div class="faq-item" data-keywords="ジェネレータ ジェネ じぇねれーた じぇね PVP ジェネレータPVP 鍛治型 どこ アイテム ネザライトフルアップグレード 強化 ネザライト ショップ">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. ジェネレータＰＶＰで鍛冶型はどこに売っていますか。
+                    <span><span class="q-prefix">Q.</span>ジェネレータPVPで鍛冶型はどこに売っていますか？</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        ジェネレータＰＶＰで鍛冶型はショップにて１００００ＣＯＩＮで販売しています。また、オークションにて格安で販売している方もいますので是非確認してみてください。
+                        ジェネレータPVP内のショップにて、10,000 COINで販売しています。また、オークションハウスにて他のプレイヤーが格安で出品している場合もありますので、ぜひそちらも確認してみてください。
                     </div>
                 </div>
             </div>
             
-                      <div class="faq-item" data-keywords="あらし 荒らし 通報 荒らしどうする あらしどうすれば 発見 やばい ヤバイ">
+            <div class="faq-item" data-keywords="あらし 荒らし 通報 荒らしどうする あらしどうすれば 発見 やばい ヤバイ">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. 荒らしまたはハッカーを見つけたらどうすればいいですか。
+                    <span><span class="q-prefix">Q.</span>荒らしやハッカーを見つけたらどうすればいいですか？</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        荒らしまたはハックは重大な規約違反です。すぐに通報を行ってください。必要であればこちらからDMでの連絡を行う事があります。(主の放置中は運営にDMなどで報告願います。)
+                        荒らしや不正ツール（ハック）の使用は重大な規約違反です。発見した場合は速やかに通報、または運営・鯖主のDiscord等へDMで報告をお願いします。主が不在（放置中）の際は、稼働している運営スタッフ宛てにメッセージを送っていただけると迅速に対応できます。
                     </div>
                 </div>
             </div>
 
-                <div class="faq-item" data-keywords="ジェネレータ ジェネ じぇねれーた じぇね PVP ジェネレータPVP ロビー ろびー 戻り方 戻る どうやって 帰還方法">
+            <div class="faq-item" data-keywords="ジェネレータ ジェネ じぇねれーた じぇね PVP ジェネレータPVP ロビー ろびー 戻り方 戻る どうやって 帰還方法">
                 <button class="faq-question" onclick="toggleFAQ(this)">
-                    Q. ジェネレータPVPにてロビーに戻るにはどうすればいいですか。
+                    <span><span class="q-prefix">Q.</span>ジェネレータPVPからロビーに戻る方法を教えてください。</span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-inner">
-                        ただいま帰還方法は整備中です
+                        ただいまロビーへの帰還方法・システムを整備中です。実装まで今しばらくお待ちください。
                     </div>
                 </div>
             </div>
-        
         
         </div>
 
+        <!-- 検索結果なし -->
         <div id="noResults" class="no-results">一致する質問が見つかりませんでした。</div>
-        <a href="index.html" class="back-link">トップに戻る</a>
+        
+        <!-- 戻るリンク -->
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
     </div>
 
     <script>
+        // サイドメニュー開閉
         function toggleMenu() {
             document.getElementById('sideMenu').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('show');
         }
+
+        // FAQアコーディオン開閉
         function toggleFAQ(btn) {
             const item = btn.parentNode;
-            item.classList.toggle('active');
+            
+            // 開閉のロジック（アニメーションをなめらかにする処理）
+            if (item.classList.contains('active')) {
+                item.classList.remove('active');
+                item.querySelector('.faq-answer').style.maxHeight = "0";
+            } else {
+                // 他の開いているアイテムを閉じたい場合はここを有効に（今回は単一開閉を維持）
+                item.classList.add('active');
+                const inner = item.querySelector('.faq-answer-inner');
+                item.querySelector('.faq-answer').style.maxHeight = inner.offsetHeight + "px";
+            }
         }
+
+        // ひらがな・カタカナの正規化フィルタリング
         function filterFAQ() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const items = document.getElementsByClassName('faq-item');
             const noResults = document.getElementById('noResults');
             let hasVisible = false;
+            
+            // カタカナをひらがなに変換して検索精度をあげる関数
             const normalize = (str) => str.replace(/[\u30a1-\u30f6]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0x60));
             const searchLower = normalize(input);
 
@@ -169,12 +361,14 @@
                 const questionText = items[i].getElementsByClassName('faq-question')[0].innerText.toLowerCase();
                 const keywords = items[i].getAttribute('data-keywords').toLowerCase();
                 const combinedText = normalize(questionText + " " + keywords);
+                
                 if (combinedText.includes(searchLower)) {
                     items[i].style.display = "";
                     hasVisible = true;
                 } else {
                     items[i].style.display = "none";
                     items[i].classList.remove('active');
+                    items[i].querySelector('.faq-answer').style.maxHeight = "0";
                 }
             }
             noResults.style.display = hasVisible ? "none" : "block";
