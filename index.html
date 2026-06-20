@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     /* ==========================================================================
-       ベースデザイン：スマホで映える、精密な固定装飾【近未来・白スクエア】UI
+       ベースデザイン：日本語×英語の共存を極めた【ハイブリッド・サイバー】UI
        ========================================================================== */
     body { 
       margin: 0; 
@@ -19,7 +19,7 @@
       letter-spacing: 0.04em;
     }
     
-    /* ヘッダー：2重の境界線で精密感を演出 */
+    /* ヘッダー */
     .header-bar { 
       position: fixed; 
       top: 0; 
@@ -29,7 +29,7 @@
       background: rgba(255, 255, 255, 0.9); 
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid #0284c7; /* クッキリとしたメイン線 */
+      border-bottom: 1px solid #0284c7; 
       color: #0f172a; 
       display: flex; 
       align-items: center; 
@@ -38,7 +38,6 @@
       box-sizing: border-box; 
       z-index: 1000; 
     }
-    /* ヘッダーの下に走るもう1本の薄い装飾線（2重構造） */
     .header-bar::after {
       content: '';
       position: absolute;
@@ -82,26 +81,29 @@
     .container { width: 90%; max-width: 440px; margin: 20px auto 40px auto; text-align: center; box-sizing: border-box; }
     .sub-text { color: #475569; margin-bottom: 35px; font-size: 11px; line-height: 1.8; font-weight: 600; letter-spacing: 1px; }
     
-    /* 🛠️ 見出しの装飾：インデックス[01]とドット線の組み合わせ */
+    /* 🛠️ 新・見出し装飾：英語のコードネームが美しく入るサイバーバッジ */
     .group-title { 
       text-align: left; 
-      font-size: 12px; 
+      font-size: 13px; 
       font-weight: 900; 
-      color: #0284c7; 
+      color: #0f172a; /* 日本語をよりはっきり見せるために濃い色へ */
       margin: 40px 0 14px 0; 
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
-    /* 見出しの前につくゲームUI風のインデックス */
+    /* 装飾ボックス：英語をシステムログのように美しく見せる */
     .group-title::before {
       content: attr(data-index);
       font-size: 9px;
-      font-weight: 700;
-      color: #94a3b8;
-      background: rgba(2, 132, 199, 0.08);
-      padding: 2px 6px;
-      border: 1px solid rgba(2, 132, 199, 0.2);
+      font-weight: 800;
+      color: #0284c7; /* 英語部分をドル鯖ブルーにして際立たせる */
+      background: rgba(2, 132, 199, 0.06);
+      padding: 3px 8px;
+      border: 1px solid rgba(2, 132, 199, 0.25);
+      text-transform: uppercase;
+      font-family: "SF Pro Display", -apple-system, sans-serif;
+      letter-spacing: 1px;
     }
     .group-title::after {
       content: '';
@@ -110,18 +112,18 @@
       background: linear-gradient(to right, rgba(2, 132, 199, 0.3), transparent);
     }
     
-    /* ⚡ ボタン基本設定：完全四角形 ＆ 左側のアクティブバー装飾 */
+    /* ⚡ ボタン基本設定 */
     .button { 
         display: flex; 
         align-items: center; 
-        justify-content: flex-start; /* 左寄せにして安定感を出す */
+        justify-content: flex-start; 
         background: #ffffff; 
         color: #334155; 
         text-decoration: none; 
         padding: 16px 20px; 
         margin-bottom: 12px; 
         border: 1px solid rgba(2, 132, 199, 0.2); 
-        border-left: 4px solid #0284c7; /* ★左側の固定カラーバー装飾 */
+        border-left: 4px solid #0284c7; 
         border-radius: 0px; 
         font-size: 13px; 
         font-weight: 700; 
@@ -130,7 +132,6 @@
         width: 100%; 
         position: relative;
     }
-    /* ボタンの右端につく矢印アイコン（固定装飾） */
     .button::after {
         content: '▶';
         position: absolute;
@@ -139,18 +140,17 @@
         color: #94a3b8;
     }
     
-    /* スマホでのタップ時のフィードバック（一瞬沈む） */
     .button:active { 
         background: #f8fafc;
         border-left-color: #0ea5e9;
     }
 
-    /* 🔥 [最重要ボタン] 認証コード発行（反転カラーで高級感を出す） */
+    /* 🔥 [最重要ボタン] 認証コード発行 */
     .btn-main { 
         background: #0284c7; 
         color: #ffffff; 
         border: 1px solid #0284c7; 
-        border-left: 4px solid #0f172a; /* ここだけアクセントに黒のライン */
+        border-left: 4px solid #0f172a; 
         font-weight: 800;
         box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
     }
@@ -160,7 +160,6 @@
     /* グリッド配置 */
     .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
     .btn-grid .button { font-size: 12px; padding: 16px 12px; margin-bottom: 0; }
-    /* グリッド内は右矢印を消してすっきりさせる */
     .btn-grid .button::after { display: none; }
     
     footer { text-align: center; padding: 60px 0 40px 0; color: #94a3b8; font-size: 10px; letter-spacing: 1px; }
@@ -194,20 +193,20 @@
   <div class="container">
     <p class="sub-text">マイクラ統合版 参加型サーバー<br>ドル鯖公式ホームページへようこそ</p>
 
-    <!-- data-index に入れた文字が自動的に装飾として見出しの横に表示されます -->
-    <div class="group-title" data-index="01">サーバーに参加する</div>
+    <!-- 💡 data-index の中に英語のシステム用語を組み込みました！ -->
+    <div class="group-title" data-index="gate">サーバーに参加する</div>
     <a href="Num.html" class="button btn-main">認証コード発行</a>
     <a href="access.html" class="button">サーバーの入り方・情報</a>
 
-    <div class="group-title" data-index="02">最新情報</div>
+    <div class="group-title" data-index="news">最新情報</div>
     <a href="updates.html" class="button">アプデ情報を確認する</a>
 
-    <div class="group-title" data-index="03">運営・管理</div>
+    <div class="group-title" data-index="admin">運営・管理</div>
     <a href="https://docs.google.com/forms/d/e/1FAIpQLSe2fkIo2BZdX3afLDcCgVmeSSwmZ5_iHbcPOMcQ9WnQ_yqqyw/viewform?usp=dialog" class="button" target="_blank">
        運営募集フォームを開く
     </a>
 
-    <div class="group-title" data-index="04">各種情報</div>
+    <div class="group-title" data-index="info">各種情報</div>
     <div class="btn-grid">
       <a href="rules.html" class="button">ルール・規約</a>
       <a href="Q.html" class="button">よくある質問</a>
@@ -215,7 +214,7 @@
     <a href="https://forms.gle/CMHnTxxfY1umVRrY6" class="button" target="_blank">報告・意見を送る</a>
     <a href="GofList.html" class="button">公開ワールド一覧・攻略</a>
 
-    <div class="group-title" data-index="05">コミュニティ</div>
+    <div class="group-title" data-index="social">コミュニティ</div>
     <div class="btn-grid">
       <a href="members.html" class="button">メンバー紹介</a>
       <a href="addons.html" class="button">アドオン紹介</a>
