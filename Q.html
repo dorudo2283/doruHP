@@ -79,13 +79,13 @@
             padding: 14px 0; 
         }
         
-        /* 検索ボックスのスクエア化統一 */
+        /* 検索ボックス */
         .search-box { 
             width: 100%; 
             padding: 14px 16px; 
             border-radius: 0px; 
             border: 1px solid rgba(2, 132, 199, 0.3); 
-            border-left: 4px solid #0f172a; /* 検索窓を引き締める黒アクセント */
+            border-left: 4px solid #0f172a; 
             font-size: 13px; 
             font-weight: 600;
             color: #0f172a;
@@ -100,7 +100,7 @@
             box-shadow: 0 4px 18px rgba(2, 132, 199, 0.08);
         }
 
-        /* FAQアイテム（カード） */
+        /* FAQアイテム */
         .faq-item { 
             background: #ffffff; 
             border: 1px solid rgba(2, 132, 199, 0.2); 
@@ -128,7 +128,6 @@
             gap: 12px;
             line-height: 1.5;
         }
-        /* Q.の文字部分だけ色を変えるためのスタイル調整 */
         .faq-question .q-prefix {
             color: #0284c7;
             font-weight: 900;
@@ -141,7 +140,7 @@
             min-width: 14px;
         }
         
-        /* 回答エリア（アニメーション用） */
+        /* 回答エリア */
         .faq-answer { 
             max-height: 0; 
             overflow: hidden; 
@@ -159,17 +158,14 @@
         
         /* 開閉時の変化 */
         .faq-item.active {
-            border-left: 4px solid #0284c7; /* 開いたときにシグネチャーラインを強調 */
-        }
-        .faq-item.active .faq-question {
-            background: #ffffff;
+            border-left: 4px solid #0284c7; 
         }
         .faq-item.active .faq-question i { 
             transform: rotate(180deg); 
             color: #0284c7;
         }
         
-        /* 検索結果ゼロ時のメッセージ */
+        /* 検索結果ゼロ時 */
         .no-results { 
             text-align: center; 
             color: #94a3b8; 
@@ -230,6 +226,59 @@
         <!-- FAQリスト -->
         <div id="faqList">
             
+            <!-- 追加質問①：端末 -->
+            <div class="faq-item" data-keywords="スマホ すまほ switch スイッチ ps4 ps5 ぴーえす 機種 きしゅ 端末 たんまつ 参加 さんか 統合版 とうごうばん">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span><span class="q-prefix">Q.</span>スマホやSwitchなど、どの機種からでも参加できますか？</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        はい、機種を問わずどなたでも参加可能です！メニューの「鯖の入り方・情報（access.html）」のページを確認し、手順通りにフレンド申請を行っていただければすぐに遊び始めることができます。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 追加質問②：課金 -->
+            <div class="faq-item" data-keywords="お金 おかね 無料 むりょう 課金 かきん コイン 料金 りょうきん 金額">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span><span class="q-prefix">Q.</span>サーバーで遊ぶのにお金（課金など）はかかりますか？</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        いいえ、当サーバーに課金機能はいっさいございません！すべてのプレイヤーの皆さんに完全無料で、かつ「公平」に楽しんでいただけるような運営を行っております。安心してご参加ください。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 追加質問③：初心者 -->
+            <div class="faq-item" data-keywords="初心者 しょしんしゃ 新規 しんき 歓迎 かんげい 馴染める なじめる 挨拶 あいさつ マナー">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span><span class="q-prefix">Q.</span>マイクラを始めたばかりの初心者や、新規でも馴染めますか？</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        大歓迎です！当サーバーは新規勢や初心者の方をいつでも温かくお迎えしています。鯖民の皆さんもとてもフレンドリーなので、すぐに仲良くなってチャットやマルチプレイを楽しめるはずです。ただし、**新しく参加した際は最初の「挨拶」を忘れないようにお願いします！**
+                    </div>
+                </div>
+            </div>
+
+            <!-- 追加質問④：配信 -->
+            <div class="faq-item" data-keywords="youtube ユーチューブ 配信 はいしん 動画 どうが x ツイッター sns 投稿 とうこう 許可 きょか 報酬 ほうしゅう コイン">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span><span class="q-prefix">Q.</span>YouTubeやSNSでサーバーの配信・動画投稿をしてもいいですか？</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        YouTube、X（旧Twitter）、その他SNSでの配信や動画投稿は大歓迎です！さらに、動画の投稿や配信を行う際に**事前に鯖主へ伝えていただくと、お礼として鯖内で使える報酬（コイン）をプレゼントしています！** ぜひ積極的に発信してくださいね。
+                    </div>
+                </div>
+            </div>
+
+            <!-- 既存質問 -->
             <div class="faq-item" data-keywords="サーバー はいりかた 参加 さんか 接続 せつぞく connect 承認 しょうにん フレンド ふれんど">
                 <button class="faq-question" onclick="toggleFAQ(this)">
                     <span><span class="q-prefix">Q.</span>フレンド申請したのに承認されません。</span>
@@ -324,36 +373,29 @@
     </div>
 
     <script>
-        // サイドメニュー開閉
         function toggleMenu() {
             document.getElementById('sideMenu').classList.toggle('open');
             document.getElementById('overlay').classList.toggle('show');
         }
 
-        // FAQアコーディオン開閉
         function toggleFAQ(btn) {
             const item = btn.parentNode;
-            
-            // 開閉のロジック（アニメーションをなめらかにする処理）
             if (item.classList.contains('active')) {
                 item.classList.remove('active');
                 item.querySelector('.faq-answer').style.maxHeight = "0";
             } else {
-                // 他の開いているアイテムを閉じたい場合はここを有効に（今回は単一開閉を維持）
                 item.classList.add('active');
                 const inner = item.querySelector('.faq-answer-inner');
                 item.querySelector('.faq-answer').style.maxHeight = inner.offsetHeight + "px";
             }
         }
 
-        // ひらがな・カタカナの正規化フィルタリング
         function filterFAQ() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const items = document.getElementsByClassName('faq-item');
             const noResults = document.getElementById('noResults');
             let hasVisible = false;
             
-            // カタカナをひらがなに変換して検索精度をあげる関数
             const normalize = (str) => str.replace(/[\u30a1-\u30f6]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0x60));
             const searchLower = normalize(input);
 
