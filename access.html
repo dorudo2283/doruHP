@@ -6,43 +6,184 @@
     <title>サーバーの入り方 - DORUDO SERVER</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* 基本スタイル */
-        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; }
+        /* ==========================================================================
+           ベースデザイン：トップページと完全同期するサイバーモダンUI
+           ========================================================================== */
+        body { 
+            margin: 0; 
+            font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; 
+            background: #090a0f; /* 深い宇宙をイメージした漆黒 */
+            padding-top: 80px; 
+            color: #e2e8f0; 
+            touch-action: manipulation;
+            letter-spacing: 0.05em;
+        }
         
-        /* ヘッダー */
-        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
+        /* ヘッダー：背景にアクリル効果（ぼかし）を適用 */
+        .header-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 60px; 
+            background: rgba(13, 14, 22, 0.8); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #fff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
+            box-sizing: border-box; 
+            z-index: 1000; 
+        }
+        .menu-btn { font-size: 22px; cursor: pointer; width: 40px; color: #38bdf8; transition: 0.2s; }
+        .menu-btn:hover { color: #fff; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; font-size: 15px; text-decoration: none; color: #fff; white-space: nowrap; letter-spacing: 2px; }
 
         /* サイドメニュー */
-        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-        .side-menu.open { left: 0; }
-        .side-menu a { display: block; padding: 15px 25px; color: white; text-decoration: none; font-size: 14px; border-bottom: 1px solid #333; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .side-menu { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #0d0e16; color: white; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; padding-top: 60px; box-sizing: border-box; border-right: 1px solid rgba(56, 189, 248, 0.1); }
+        .side-menu.open { transform: translateX(260px); }
+        .side-menu a { display: block; padding: 16px 28px; color: #94a3b8; text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s; }
+        .side-menu a:hover { color: #38bdf8; background: rgba(56, 189, 248, 0.05); padding-left: 34px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1500; backdrop-filter: blur(4px); }
         .overlay.show { display: block; }
 
-        /* コンテンツ */
-        .container { width: 92%; max-width: 600px; margin: 0 auto; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 20px; border-top: 5px solid #007bff; }
-        h1 { font-size: 24px; text-align: center; margin-bottom: 30px; color: #111; }
-        h2 { font-size: 18px; color: #007bff; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        /* コンテンツエリア */
+        .container { width: 90%; max-width: 480px; margin: 0 auto; }
         
-        /* ゲーマータグ表示 */
-        .gt-box { background: #f8f9fa; border: 2px solid #ddd; border-radius: 12px; padding: 15px; display: flex; align-items: center; justify-content: space-between; margin: 10px 0; }
-        .gt-text { font-family: monospace; font-size: 20px; font-weight: bold; color: #111; }
-        .copy-btn { background: #111; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        /* ページタイトル */
+        h1 { 
+            font-size: 20px; 
+            font-weight: 800; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            color: #fff; 
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+        
+        /* コンテンツカード：ソリッドなメタル感を演出 */
+        .card { 
+            background: #121420; 
+            padding: 24px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25); 
+            margin-bottom: 18px; 
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* カードの見出し */
+        h2 { 
+            font-size: 14px; 
+            font-weight: 800;
+            color: #38bdf8; 
+            margin-top: 0;
+            margin-bottom: 16px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        h2 i { font-size: 15px; }
+        
+        /* 内部のテキスト */
+        .card p { font-size: 13px; line-height: 1.6; color: #94a3b8; margin: 0 0 12px 0; }
+        .card p strong { color: #fff; }
+
+        /* ゲーマータグ表示ボックス */
+        .gt-box { 
+            background: #090a0f; 
+            border: 1px solid rgba(56, 189, 248, 0.2); 
+            border-radius: 8px; 
+            padding: 12px 16px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            margin: 14px 0; 
+        }
+        .gt-text { 
+            font-family: 'SF Mono', SFMono-Regular, Consolas, monospace; 
+            font-size: 18px; 
+            font-weight: 700; 
+            color: #fff; 
+            letter-spacing: 1px;
+        }
+        
+        /* コピーボタン */
+        .copy-btn { 
+            background: #38bdf8; 
+            color: #090a0f; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-size: 12px; 
+            font-weight: 700;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); 
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+        }
+        @media (hover: hover) {
+            .copy-btn:hover { 
+                background: #7dd3fc; 
+                box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4);
+            }
+        }
         .copy-btn:active { transform: scale(0.95); }
 
-        /* 時間表 */
-        .time-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        .time-table td { padding: 12px; border-bottom: 1px solid #eee; }
-        .time-label { font-weight: bold; width: 80px; }
-        .time-value { color: #007bff; font-weight: bold; text-align: right; }
+        /* 時間表（テーブル） */
+        .time-table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        .time-table td { padding: 14px 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.03); font-size: 13px; }
+        .time-table tr:last-child td { border-bottom: none; }
+        .time-label { font-weight: 600; color: #94a3b8; }
+        .time-value { color: #34d399; font-weight: 700; text-align: right; text-shadow: 0 0 10px rgba(52, 211, 153, 0.1); }
 
-        /* 注意事項 */
-        .info-box { background: #eef7ff; border-radius: 12px; padding: 15px; font-size: 14px; line-height: 1.6; color: #444; }
+        /* インフォボックス（通知・挨拶など） */
+        .info-box { 
+            background: rgba(56, 189, 248, 0.04); 
+            border-left: 3px solid #38bdf8; 
+            border-radius: 4px; 
+            padding: 14px; 
+            font-size: 13px; 
+            line-height: 1.6; 
+            color: #94a3b8; 
+        }
+        .info-box strong { color: #fff; }
+        
+        /* 挨拶注意用のネオンイエロー/オレンジボックス */
+        .alert-box {
+            background: rgba(245, 158, 11, 0.05);
+            border-left: 3px solid #f59e0b;
+            border-radius: 4px;
+            padding: 14px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #e2e8f0;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        .alert-box i { color: #f59e0b; margin-right: 6px; }
 
-        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+        /* 戻るリンク */
+        .back-link { 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            text-align: center; 
+            margin: 30px 0 50px 0; 
+            color: #475569; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #38bdf8; }
     </style>
 </head>
 <body>
@@ -67,7 +208,7 @@
     </div>
 
     <div class="container">
-        <h1>サーバー参加ガイド</h1>
+        <h1>SERVER ACCESS</h1>
 
         <div class="card">
             <h2><i class="fa-solid fa-server"></i> サーバー形式</h2>
@@ -79,52 +220,63 @@
 
         <div class="card">
             <h2><i class="fa-solid fa-user-plus"></i> 参加方法</h2>
-            <p style="font-size: 14px;"> dorudo2283 にフレンド申請をして解放時間になったら参加可能です。</p>
+            <p>下記のゲーマータグにフレンド申請を送り、解放時間になったらご参加ください。</p>
+            
             <div class="gt-box">
                 <span class="gt-text" id="gt">dorudo2283</span>
                 <button class="copy-btn" onclick="copyGT()">コピー</button>
             </div>
-            <p style="font-size: 13px; color: #d32f2f; font-weight: bold; margin-top: 15px;">
-                <i class="fa-solid fa-comment"></i> 参加時は必ず挨拶をお願いします！
-            </p>
+            
+            <div class="alert-box">
+                <i class="fa-solid fa-comment"></i> 参加時は必ずチャットでの挨拶をお願いします！
+            </div>
         </div>
 
         <div class="card">
             <h2><i class="fa-solid fa-clock"></i> サーバー開催時間</h2>
             <table class="time-table">
                 <tr>
-                    <td class="time-label">平日(日〜木)</td>
-                    <td class="time-value">18:00 ～ 24:00</td>
+                    <td class="time-label">平日（日〜木）</td>
+                    <td class="time-value">18:00 〜 24:00</td>
                 </tr>
                 <tr>
-                    <td class="time-label">休日(金〜土)</td>
-                    <td class="time-value">18:00 ～ 24:30</td>
+                    <td class="time-label">休日（金〜土）</td>
+                    <td class="time-value">18:00 〜 24:30</td>
                 </tr>
             </table>
-            <p style="font-size: 12px; color: #888; margin-top: 10px;">※主の都合により前後する場合があります。</p>
+            <p style="font-size: 11px; color: #475569; margin-top: 12px; margin-bottom: 0;">
+                ※管理者の都合により、時間が前後する場合があります。
+            </p>
         </div>
 
-        <a href="index.html" class="back-link">トップに戻る</a>
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
     </div>
 
     <script>
         // サイドメニュー開閉
         function toggleMenu() {
-            document.getElementById('sideMenu').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('show');
+            const sideMenu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            sideMenu.classList.toggle('open');
+            overlay.classList.toggle('show');
         }
 
-        // ゲーマータグコピー
+        // ゲーマータグコピー＆視覚フィードバック
         function copyGT() {
             const gt = document.getElementById('gt').innerText;
             navigator.clipboard.writeText(gt).then(() => {
                 const btn = document.querySelector('.copy-btn');
-                btn.innerText = "完了！";
-                btn.style.background = "#28a745";
+                btn.innerText = "SUCCESS";
+                btn.style.background = "#10b981"; /* エメラルドグリーン */
+                btn.style.color = "#fff";
+                btn.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.4)";
+                
                 setTimeout(() => {
                     btn.innerText = "コピー";
-                    btn.style.background = "#111";
-                }, 2000);
+                    btn.style.background = "#38bdf8"; /* サイバーブルーに戻す */
+                    btn.style.color = "#090a0f";
+                    btn.style.boxShadow = "0 4px 12px rgba(56, 189, 248, 0.2)";
+                }, 1500);
             });
         }
     </script>
