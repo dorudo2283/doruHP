@@ -3,38 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ジェネレータＰＶＰ 詳細 - DORUDO SERVER</title>
+    <title>ショップPVP 詳細 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; line-height: 1.6; }
+        /* ==========================================================================
+           ベースデザイン：サイト全体と完全同期する【プレミアム・ホワイト】UI
+           ========================================================================== */
+        body { 
+            margin: 0; 
+            font-family: -apple-system, "SF Pro Display", "Helvetica Neue", "Hiragino Kaku Gothic ProN", "メイリオ", sans-serif; 
+            background: #f4f7fc; 
+            padding-top: 80px; 
+            color: #0f172a; 
+            touch-action: manipulation;
+            letter-spacing: 0.04em;
+            line-height: 1.6;
+        }
         
-        /* ヘッダー・サイドメニュー（完全同期） */
-        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-        .side-menu.open { left: 0; }
-        .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; text-align: left; }
-        .side-menu a:hover { color: #fff; background: #222; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+        /* ヘッダー・メニュー */
+        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(16px); border-bottom: 1px solid #0284c7; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 20px; cursor: pointer; width: 40px; color: #0284c7; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 900; font-size: 14px; text-decoration: none; color: #0f172a; letter-spacing: 2px; }
+        
+        /* サイドメニュー・オーバーレイ */
+        .side-menu { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #ffffff; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; padding-top: 60px; border-right: 2px solid #0284c7; }
+        .side-menu.open { transform: translateX(260px); }
+        .side-menu a { display: block; padding: 16px 28px; color: #334155; text-decoration: none; font-size: 13px; font-weight: 600; border-bottom: 1px solid rgba(0,0,0,0.04); }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.2); display: none; z-index: 1500; backdrop-filter: blur(4px); }
         .overlay.show { display: block; }
+
+        /* コンテンツ */
+        .container { width: 90%; max-width: 440px; margin: 0 auto; padding-bottom: 50px; }
         
-        /* コンテンツエリア */
-        .container { width: 92%; max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
+        .title-card { background: #ffffff; padding: 24px 20px; border: 1px solid rgba(2, 132, 199, 0.2); border-left: 4px solid #0f172a; box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02); margin-bottom: 16px; }
+        .world-name { font-size: 18px; font-weight: 900; color: #0f172a; margin: 0 0 10px 0; }
+        .world-genre { display: inline-block; background: #f0f7ff; color: #0284c7; font-weight: 800; font-size: 11px; padding: 4px 10px; border-left: 2px solid #0284c7; }
         
-        /* 🔵 最上部：名前・ジャンル用のカード（チャンキング設計） */
-        .title-card { background: white; padding: 30px 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 20px; box-sizing: border-box; }
-        .world-name { font-size: 26px; font-weight: bold; color: #111; margin: 0 0 8px 0; }
-        .world-genre { display: inline-block; background: #e0f2fe; color: #007bff; font-weight: bold; font-size: 13px; padding: 4px 14px; border-radius: 20px; }
+        .info-card { background: #ffffff; padding: 28px 24px; border: 1px solid rgba(2, 132, 199, 0.2); box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02); }
+        .info-section { margin-bottom: 28px; }
+        .info-label { font-size: 13px; font-weight: 900; color: #0284c7; border-left: 3px solid #0284c7; padding-left: 10px; margin-bottom: 12px; letter-spacing: 1px; }
+        .info-desc { font-size: 13px; color: #334155; font-weight: 600; line-height: 1.7; }
         
-        /* 🔵 下部：項目と説明用のメインカード */
-        .info-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); text-align: left; box-sizing: border-box; }
-        
-        .info-section { margin-bottom: 25px; }
-        .info-section:last-child { margin-bottom: 0; }
-        .info-label { font-size: 16px; font-weight: bold; color: #007bff; border-left: 4px solid #007bff; padding-left: 10px; margin-bottom: 8px; }
-        .info-desc { font-size: 14px; color: #475569; padding-left: 14px; }
-        
-        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+        .step-list { margin: 0; padding: 0; list-style: none; }
+        .step-list li { position: relative; padding-left: 24px; margin-bottom: 10px; }
+        .step-num { position: absolute; left: 0; top: 2px; font-size: 11px; font-weight: 900; background: #0f172a; color: #ffffff; width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; }
+
+        .notice-box { background: #fef2f2; border-left: 3px solid #ef4444; padding: 12px 14px; margin-top: 15px; color: #991b1b; font-size: 12px; }
+        .back-link { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; margin: 30px 0 60px 0; color: #64748b; text-decoration: none; font-size: 13px; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -59,7 +74,6 @@
     </div>
 
     <div class="container">
-        
         <div class="title-card">
             <h1 class="world-name">ショップPVP</h1>
             <span class="world-genre">PVP / ショップ / 無限PVP / ブロック設置可</span>
@@ -68,32 +82,38 @@
         <div class="info-card">
             <div class="info-section">
                 <div class="info-label">ワールド概要</div>
-                <div class="info-desc">普通なショップPVP。だが、その普通がPVP欲を高めてくれるのだ。延々とPVPをしたい方、PVPを練習したい方にお勧め。</div>
+                <div class="info-desc">王道かつ洗練されたショップPVPマップ。シンプルだからこそ、純粋な戦闘への情熱が引き出されます。延々とバトルを楽しみたい方や、戦闘技術を磨き上げたい練習プレイヤーに最適です。</div>
             </div>
             
             <div class="info-section">
                 <div class="info-label">ゲーム進行</div>
-                <div class="info-desc">1. ロビーにある初期チェストから初期装備（石剣など）を取ろう。<br>
-                    2. 早速PVPエリア（ロビーからいけます）へ行って、敵をキルしよう！<br>
-                    キルをするとCOINがもらえるぞ！<br>
-                        3. COINを使ってショップで買い物をしよう。<br>
-                        4. ランキング上位・ショップのレアアイテム購入を目指してPVPを使用！<br>
-                        5. ブリッジ練習場などもあります。
+                <div class="info-desc">
+                    <ul class="step-list">
+                        <li><span class="step-num">1</span>ロビーの初期チェストからスターター装備を回収。</li>
+                        <li><span class="step-num">2</span>PVPエリアへ突入し、敵をキルして「COIN」を獲得。</li>
+                        <li><span class="step-num">3</span>ショップでより強力な装備や物資を調達。</li>
+                        <li><span class="step-num">4</span>ランキング上位やレアアイテム購入を目指して戦闘を継続。</li>
+                        <li><span class="step-num">5</span>ブリッジ練習場などで技術の研鑽も可能です。</li>
+                    </ul>
                 </div>
             </div>
             
             <div class="info-section">
-                <div class="info-label">備考</div>
-                <div class="info-desc">・ このマップで使用されているアドオンのクレジットはマップ内に記載されています。<br>
-                    ・チーミングは相手があまりに強かった場合（３ｖ１で勝てるような相手）は１（相手）ｖ２までを許可します。<br>
-                    ・新しい練習場追加など欲しいものがあれば教えてください。<br>
-                    ・/doru:~などでドル鯖オリジナルのコマンドが使用できます。詳細は　/doru:chelp または /chelp を実行してください。<br>
-                    ・また、当MAPでは　"-30以上"　での建築を許可していません。従って、行った場合は故意でなくてもキックを行います。
+                <div class="info-label">備考・独自コマンド</div>
+                <div class="info-desc">
+                    ・ アドオンのクレジットはマップ内に記載されています。<br>
+                    ・ 相手が圧倒的に強者（3v1相当）の場合に限り、「1 v 2」の共闘を許可します。<br>
+                    ・ 独自コマンド `/doru:chelp`（または `/chelp`）で詳細を確認可能。<br>
+                    ・ 追加要望があれば運営までお知らせください。
+                    <div class="notice-box">
+                        <i class="fa-solid fa-triangle-exclamation"></i> **建築制限について**<br>
+                        当マップでは、高度 Y = -30 以上での建築を許可していません。違反時は故意・過失を問わず自動的にキック対象となります。
+                    </div>
                 </div>
             </div>
         </div>
         
-        <a href="GofList.html" class="back-link">ワールド一覧に戻る</a>
+        <a href="GofList.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> ワールド一覧に戻る</a>
     </div>
 
     <script>
