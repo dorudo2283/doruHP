@@ -4,38 +4,151 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>利用規約 - DORUDO SERVER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; line-height: 1.6; }
+        /* ==========================================================================
+           ベースデザイン：サイト全体と完全同期するサイバーモダンUI
+           ========================================================================== */
+        body { 
+            margin: 0; 
+            font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; 
+            background: #090a0f; /* 深い宇宙をイメージした漆黒 */
+            padding-top: 80px; 
+            color: #e2e8f0; 
+            touch-action: manipulation;
+            line-height: 1.7;
+            letter-spacing: 0.05em;
+        }
         
-        /* ヘッダー・サイドメニュー（公式トップと完全同期） */
-        .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
-        .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
-        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
-        .side-menu { position: fixed; top: 0; left: -250px; width: 250px; height: 100%; background: #111; color: white; transition: 0.3s; z-index: 2000; padding-top: 60px; box-sizing: border-box; }
-        .side-menu.open { left: 0; }
-        .side-menu a { display: block; padding: 15px 25px; color: #ccc; text-decoration: none; font-size: 14px; border-bottom: 1px solid #222; transition: 0.2s; text-align: left; }
-        .side-menu a:hover { color: #fff; background: #222; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); display: none; z-index: 1500; }
+        /* ヘッダー：背景にアクリル効果（ぼかし）を適用 */
+        .header-bar { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 60px; 
+            background: rgba(13, 14, 22, 0.8); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            color: #fff; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 0 20px; 
+            box-sizing: border-box; 
+            z-index: 1000; 
+        }
+        .menu-btn { font-size: 22px; cursor: pointer; width: 40px; color: #38bdf8; transition: 0.2s; }
+        .menu-btn:hover { color: #fff; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 800; font-size: 15px; text-decoration: none; color: #fff; white-space: nowrap; letter-spacing: 2px; }
+
+        /* サイドメニュー */
+        .side-menu { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #0d0e16; color: white; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; padding-top: 60px; box-sizing: border-box; border-right: 1px solid rgba(56, 189, 248, 0.1); }
+        .side-menu.open { transform: translateX(260px); }
+        .side-menu a { display: block; padding: 16px 28px; color: #94a3b8; text-decoration: none; font-size: 14px; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s; }
+        .side-menu a:hover { color: #38bdf8; background: rgba(56, 189, 248, 0.05); padding-left: 34px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; z-index: 1500; backdrop-filter: blur(4px); }
         .overlay.show { display: block; }
 
         /* コンテンツエリア */
-        .container { width: 92%; max-width: 700px; margin: 0 auto; padding-bottom: 50px; }
-        h1 { font-size: 26px; text-align: center; margin-bottom: 30px; color: #111; }
+        .container { width: 90%; max-width: 550px; margin: 0 auto; padding-bottom: 50px; }
         
-        .section-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        .section-title { font-size: 20px; color: #007bff; border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; font-weight: bold; }
+        /* ページタイトル */
+        h1 { 
+            font-size: 20px; 
+            font-weight: 800; 
+            text-align: center; 
+            margin-bottom: 30px; 
+            color: #fff; 
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
         
-        /* 規約リスト */
-        .rule-item { margin-bottom: 20px; }
-        .rule-item:last-child { margin-bottom: 0; }
-        .rule-header { font-weight: bold; font-size: 16px; margin-bottom: 5px; color: #111; }
-        .rule-desc { font-size: 14px; color: #555; padding-left: 10px; }
+        /* セクションカード：ソリッドなメタル感を演出 */
+        .section-card { 
+            background: #121420; 
+            padding: 24px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25); 
+            margin-bottom: 20px; 
+        }
         
-        /* 警告・処分の強調 */
-        .punishment { color: #d32f2f; font-weight: bold; }
-        .notice { background: #fff4f4; border-left: 4px solid #d32f2f; padding: 10px; margin-top: 15px; border-radius: 4px; font-size: 14px; }
+        /* セクションタイトル */
+        .section-title { 
+            font-size: 14px; 
+            font-weight: 800;
+            color: #38bdf8; 
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2); 
+            padding-bottom: 10px; 
+            margin-bottom: 20px; 
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        /* 規約アイテム */
+        .rule-item { 
+            margin-bottom: 18px; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            padding-bottom: 14px;
+        }
+        .rule-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+        
+        .rule-header { 
+            font-weight: 700; 
+            font-size: 14px; 
+            margin-bottom: 6px; 
+            color: #fff; 
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .rule-desc { 
+            font-size: 13px; 
+            color: #94a3b8; 
+            padding-left: 2px; 
+        }
+        .rule-desc strong { color: #fff; }
+        
+        /* 🔴 警告・処分のサイバーレッド強調 */
+        .punishment { 
+            color: #f87171; 
+            font-weight: 700; 
+            background: rgba(239, 68, 68, 0.08);
+            padding: 1px 4px;
+            border-radius: 4px;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+        }
+        
+        /* 特記事項・補足ボックス */
+        .notice { 
+            background: rgba(239, 68, 68, 0.03); 
+            border-left: 3px solid #ef4444; 
+            padding: 14px; 
+            margin-top: 15px; 
+            border-radius: 4px; 
+            font-size: 12px; 
+            color: #94a3b8;
+            line-height: 1.6;
+        }
 
-        .back-link { display: block; text-align: center; margin: 30px 0; color: #888; text-decoration: none; font-size: 14px; }
+        /* 戻るリンク */
+        .back-link { 
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            text-align: center; 
+            margin: 30px 0; 
+            color: #475569; 
+            text-decoration: none; 
+            font-size: 13px; 
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .back-link:hover { color: #38bdf8; }
     </style>
 </head>
 <body>
@@ -60,24 +173,26 @@
     </div>
 
     <div class="container">
-        <h1>利用規約（ルール）</h1>
+        <h1>SERVER RULES</h1>
 
+        <!-- 基本方針 -->
         <div class="section-card">
             <div class="section-title">基本方針</div>
             <div class="rule-item">
-                <div class="rule-header">第一 楽しみの共有</div>
+                <div class="rule-header"><i class="fa-solid fa-heart" style="color: #ec4899; font-size: 12px;"></i> 第一 楽しみの共有</div>
                 <div class="rule-desc">全てのプレイヤーが心から楽しみ、笑顔で遊べるサーバーを目指します。</div>
             </div>
             <div class="rule-item">
-                <div class="rule-header">第二 バランスの維持</div>
+                <div class="rule-header"><i class="fa-solid fa-scale-balanced" style="color: #3b82f6; font-size: 12px;"></i> 第二 バランスの維持</div>
                 <div class="rule-desc">便利さを追求しつつも、サバイバル本来の楽しさやゲームバランスを損なわない運営を心がけます。</div>
             </div>
             <div class="rule-item">
-                <div class="rule-header">第三 相互の敬意</div>
+                <div class="rule-header"><i class="fa-solid fa-handshake" style="color: #10b981; font-size: 12px;"></i> 第三 相互の敬意</div>
                 <div class="rule-desc">初心者から熟練者まで、全員が対等に敬意を持って接することを大切にします。</div>
             </div>
         </div>
 
+        <!-- 一般規約 -->
         <div class="section-card">
             <div class="section-title">一般規約</div>
             <div class="rule-item">
@@ -114,6 +229,7 @@
             </div>
         </div>
 
+        <!-- 処分について -->
         <div class="section-card">
             <div class="section-title">処分について</div>
             <div class="rule-item">
@@ -129,13 +245,17 @@
             </div>
         </div>
 
-        <a href="index.html" class="back-link">トップに戻る</a>
+        <!-- 戻るリンク -->
+        <a href="index.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> トップに戻る</a>
     </div>
 
     <script>
+        // サイドメニュー開閉
         function toggleMenu() {
-            document.getElementById('sideMenu').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('show');
+            const sideMenu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            sideMenu.classList.toggle('open');
+            overlay.classList.toggle('show');
         }
     </script>
 </body>
