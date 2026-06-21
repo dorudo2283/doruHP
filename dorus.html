@@ -7,7 +7,7 @@
     <style>
         body { margin: 0; font-family: 'Helvetica Neue', Arial, sans-serif; background: #f0f7ff; padding-top: 80px; color: #333; line-height: 1.6; }
         
-        /* ヘッダー・サイドメニュー（完全同期） */
+        /* ヘッダー・サイドメニュー */
         .header-bar { position: fixed; top: 0; left: 0; width: 100%; height: 60px; background: #111; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
         .menu-btn { font-size: 24px; cursor: pointer; width: 40px; }
         .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: bold; font-size: 18px; text-decoration: none; color: #fff; }
@@ -21,12 +21,11 @@
         /* コンテンツエリア */
         .container { width: 92%; max-width: 600px; margin: 0 auto; padding-bottom: 50px; }
         
-        /* 🔵 最上部：名前・ジャンル用のカード（チャンキング設計） */
+        /* 四角いカードデザイン */
         .title-card { background: white; padding: 30px 20px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); margin-bottom: 20px; box-sizing: border-box; }
         .world-name { font-size: 26px; font-weight: bold; color: #111; margin: 0 0 8px 0; }
         .world-genre { display: inline-block; background: #e0f2fe; color: #007bff; font-weight: bold; font-size: 13px; padding: 4px 14px; border-radius: 20px; }
         
-        /* 🔵 下部：項目と説明用のメインカード */
         .info-card { background: white; padding: 35px 25px; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); text-align: left; box-sizing: border-box; }
         
         .info-section { margin-bottom: 25px; }
@@ -59,7 +58,6 @@
     </div>
 
     <div class="container">
-        
         <div class="title-card">
             <h1 class="world-name">DORUDO SMP</h1>
             <span class="world-genre">サバイバル / 経済 / 同盟 / 多機能アドオン</span>
