@@ -7,15 +7,20 @@
     <style>
         body { margin: 0; font-family: -apple-system, sans-serif; background: #f4f7fc; padding-top: 80px; color: #0f172a; }
         
-        /* ヘッダー・メニュー */
+        /* ⚡ 高速化サイドメニュー */
         .header-bar { position: fixed; top: 0; width: 100%; height: 60px; background: #fff; border-bottom: 1px solid #0284c7; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
         .menu-btn { font-size: 20px; cursor: pointer; color: #0284c7; width: 40px; }
         .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 900; font-size: 14px; text-decoration: none; color: #0f172a; }
         
-        .side-menu { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #ffffff; transition: 0.3s; z-index: 2000; padding-top: 60px; border-right: 2px solid #0284c7; }
-        .side-menu.open { left: 0; }
+        .side-menu { 
+            position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #ffffff; 
+            z-index: 2000; padding-top: 60px; border-right: 2px solid #0284c7;
+            will-change: transform;
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .side-menu.open { transform: translateX(260px); }
         .side-menu a { display: block; padding: 16px 28px; color: #334155; text-decoration: none; font-size: 13px; font-weight: 600; border-bottom: 1px solid #f1f5f9; }
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: none; z-index: 1500; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: none; z-index: 1500; transition: opacity 0.2s; }
         .overlay.show { display: block; }
 
         .container { width: 90%; max-width: 440px; margin: 0 auto; padding-bottom: 50px; }
@@ -24,15 +29,15 @@
         .filter-section { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         #searchInput { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
-        .checkbox-group label { font-size: 12px; font-weight: bold; background: #f1f5f9; padding: 5px 10px; border-radius: 15px; cursor: pointer; }
+        .checkbox-group label { font-size: 12px; font-weight: bold; background: #f1f5f9; padding: 5px 10px; border-radius: 15px; cursor: pointer; display: flex; align-items: center; gap: 4px; }
         
         /* カード */
         .addon-card { background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0284c7; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .addon-card.ext { border-left-color: #64748b; }
         .addon-category { font-size: 10px; font-weight: 900; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
         .addon-title { font-size: 16px; font-weight: 900; margin: 0 0 5px 0; }
-        .addon-tags { font-size: 11px; color: #0284c7; margin-bottom: 8px; }
-        .addon-desc { font-size: 13px; color: #475569; }
+        .addon-tags { font-size: 11px; color: #0284c7; margin-bottom: 8px; font-weight: 700; }
+        .addon-desc { font-size: 13px; color: #475569; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -86,8 +91,10 @@
 
     <script>
         function toggleMenu() {
-            document.getElementById('sideMenu').classList.toggle('open');
-            document.getElementById('overlay').classList.toggle('show');
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            const isOpen = menu.classList.toggle('open');
+            overlay.classList.toggle('show', isOpen);
         }
 
         function filterAddons() {
