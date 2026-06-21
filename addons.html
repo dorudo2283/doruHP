@@ -3,73 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>アドオン一覧 - DORUDO SERVER</title>
+    <title>導入アドオン一覧 - DORUDO SERVER</title>
     <style>
         body { margin: 0; font-family: -apple-system, sans-serif; background: #f4f7fc; padding-top: 80px; color: #0f172a; }
+        
+        /* ヘッダー・メニュー */
+        .header-bar { position: fixed; top: 0; width: 100%; height: 60px; background: #fff; border-bottom: 1px solid #0284c7; display: flex; align-items: center; padding: 0 20px; box-sizing: border-box; z-index: 1000; }
+        .menu-btn { font-size: 20px; cursor: pointer; color: #0284c7; width: 40px; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); font-weight: 900; font-size: 14px; text-decoration: none; color: #0f172a; }
+        
+        .side-menu { position: fixed; top: 0; left: -260px; width: 260px; height: 100%; background: #ffffff; transition: 0.3s; z-index: 2000; padding-top: 60px; border-right: 2px solid #0284c7; }
+        .side-menu.open { left: 0; }
+        .side-menu a { display: block; padding: 16px 28px; color: #334155; text-decoration: none; font-size: 13px; font-weight: 600; border-bottom: 1px solid #f1f5f9; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: none; z-index: 1500; }
+        .overlay.show { display: block; }
+
         .container { width: 90%; max-width: 440px; margin: 0 auto; padding-bottom: 50px; }
         
-        /* 検索・フィルタエリア */
+        /* 検索・フィルタ */
         .filter-section { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
         #searchInput { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; }
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 10px; }
         .checkbox-group label { font-size: 12px; font-weight: bold; background: #f1f5f9; padding: 5px 10px; border-radius: 15px; cursor: pointer; }
         
-        /* カードデザイン */
+        /* カード */
         .addon-card { background: white; padding: 20px; border-radius: 10px; border-left: 5px solid #0284c7; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .addon-card.ext { border-left-color: #64748b; }
-        .addon-category { font-size: 10px; font-weight: 900; color: #64748b; text-transform: uppercase; }
-        .addon-title { font-size: 16px; font-weight: 900; margin: 5px 0; }
-        .addon-tags { font-size: 11px; color: #0284c7; margin-bottom: 5px; }
+        .addon-category { font-size: 10px; font-weight: 900; color: #64748b; text-transform: uppercase; margin-bottom: 5px; }
+        .addon-title { font-size: 16px; font-weight: 900; margin: 0 0 5px 0; }
+        .addon-tags { font-size: 11px; color: #0284c7; margin-bottom: 8px; }
         .addon-desc { font-size: 13px; color: #475569; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>アドオン一覧</h1>
-    
-    <div class="filter-section">
-        <input type="text" id="searchInput" placeholder="名前やタグで検索..." oninput="filterAddons()">
-        <div class="checkbox-group">
-            <label><input type="checkbox" class="filter-check" value="自作" onchange="filterAddons()"> 自作</label>
-            <label><input type="checkbox" class="filter-check" value="外部" onchange="filterAddons()"> 外部</label>
-            <label><input type="checkbox" class="filter-check" value="便利" onchange="filterAddons()"> 便利</label>
-            <label><input type="checkbox" class="filter-check" value="建築" onchange="filterAddons()"> 建築</label>
+    <div id="overlay" class="overlay" onclick="toggleMenu()"></div>
+    <div id="sideMenu" class="side-menu">
+        <a href="index.html">トップ</a>
+        <a href="updates.html">アプデ情報</a>
+        <a href="Num.html">認証コード発行</a>
+        <a href="access.html">鯖の入り方・情報</a>
+        <a href="rules.html">ルール</a>
+        <a href="Q.html">よくある質問</a>
+        <a href="GofList.html">ワールド一覧</a>
+        <a href="members.html">メンバー紹介</a>
+        <a href="Admin.html">管理者パネル</a>
+    </div>
+
+    <div class="header-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <a href="index.html" class="header-title">DORUDO SERVER</a>
+    </div>
+
+    <div class="container">
+        <h1>導入アドオン一覧</h1>
+        
+        <div class="filter-section">
+            <input type="text" id="searchInput" placeholder="名前やタグで検索..." oninput="filterAddons()">
+            <div class="checkbox-group">
+                <label><input type="checkbox" class="filter-check" value="自作" onchange="filterAddons()"> 自作</label>
+                <label><input type="checkbox" class="filter-check" value="外部" onchange="filterAddons()"> 外部</label>
+                <label><input type="checkbox" class="filter-check" value="便利" onchange="filterAddons()"> 便利</label>
+                <label><input type="checkbox" class="filter-check" value="建築" onchange="filterAddons()"> 建築</label>
+            </div>
+        </div>
+
+        <div id="addonList">
+            <div class="addon-card" data-name="独自通貨アドオン" data-tags="自作 便利">
+                <div class="addon-category">自作アドオン</div>
+                <div class="addon-title">独自通貨アドオン</div>
+                <div class="addon-tags">自作 便利</div>
+                <div class="addon-desc">サーバー内の取引に使用する通貨を管理します。</div>
+            </div>
+            <div class="addon-card ext" data-name="家具追加アドオン" data-tags="外部 建築">
+                <div class="addon-category">外部アドオン</div>
+                <div class="addon-title">家具追加アドオン</div>
+                <div class="addon-tags">外部 建築</div>
+                <div class="addon-desc">建築の幅を広げる多種多様な家具を追加します。</div>
+            </div>
         </div>
     </div>
 
-    <div id="addonList">
-        <div class="addon-card" data-name="独自通貨アドオン" data-tags="自作 便利">
-            <div class="addon-category">自作アドオン</div>
-            <div class="addon-title">独自通貨アドオン</div>
-            <div class="addon-tags">自作 便利</div>
-            <div class="addon-desc">サーバー内の取引に使用する通貨を管理します。</div>
-        </div>
-        <div class="addon-card ext" data-name="家具追加アドオン" data-tags="外部 建築">
-            <div class="addon-category">外部アドオン</div>
-            <div class="addon-title">家具追加アドオン</div>
-            <div class="addon-tags">外部 建築</div>
-            <div class="addon-desc">建築の幅を広げる多種多様な家具を追加します。</div>
-        </div>
-    </div>
-</div>
+    <script>
+        function toggleMenu() {
+            document.getElementById('sideMenu').classList.toggle('open');
+            document.getElementById('overlay').classList.toggle('show');
+        }
 
-<script>
-    function filterAddons() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const checked = Array.from(document.querySelectorAll('.filter-check:checked')).map(c => c.value);
-        const cards = document.querySelectorAll('.addon-card');
+        function filterAddons() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const checked = Array.from(document.querySelectorAll('.filter-check:checked')).map(c => c.value);
+            const cards = document.querySelectorAll('.addon-card');
 
-        cards.forEach(card => {
-            const name = card.getAttribute('data-name').toLowerCase();
-            const tags = card.getAttribute('data-tags');
-            
-            const matchesQuery = name.includes(query) || tags.includes(query);
-            const matchesCheck = checked.length === 0 || checked.some(c => tags.includes(c));
-
-            card.style.display = (matchesQuery && matchesCheck) ? "" : "none";
-        });
-    }
-</script>
+            cards.forEach(card => {
+                const name = card.getAttribute('data-name').toLowerCase();
+                const tags = card.getAttribute('data-tags');
+                const matchesQuery = name.includes(query) || tags.includes(query);
+                const matchesCheck = checked.length === 0 || checked.some(c => tags.includes(c));
+                card.style.display = (matchesQuery && matchesCheck) ? "" : "none";
+            });
+        }
+    </script>
 </body>
 </html>
